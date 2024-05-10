@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: "CabinBold";
+    src: url("../public/fontFamily/Adelle_Reg.otf");
+  }
