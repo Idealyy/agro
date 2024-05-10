@@ -5,12 +5,18 @@ import Today from './today'
 const meteo = () => {
 
   const [weather, setWeather] = useState('')
+  const [weather2, setWeather2] = useState('')
 
   const generateWeather = () => {
       const weatherOptions = ['Ensoleillé', 'partiellement nuageux', 'pluvieux', 'Orageux'];
       const randomIndex = Math.floor(Math.random() * weatherOptions.length);
       const randomWeather = weatherOptions[randomIndex];
+
+      const randomIndex2 = Math.floor(Math.random() * weatherOptions.length);
+      const randomWeather2 = weatherOptions[randomIndex2];
+
       setWeather(randomWeather);
+      setWeather2(randomWeather2);
     };
 
     useEffect(() => {
@@ -26,7 +32,7 @@ const meteo = () => {
       </div>
 
       <div>
-        <Tomorrow weather={weather} />
+        <Tomorrow weather={weather2} />
       </div>
     </div>
   )

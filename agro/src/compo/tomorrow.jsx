@@ -17,7 +17,7 @@ const Tomorrow = ({ weather }) => {
       <rect width="45.255" height="32" x="73.373" y="400" transform="rotate(-45.001 96.002 416.003)"></rect>
       <rect width="45.255" height="32.001" x="393.373" y="80" transform="rotate(-45 416 96)"></rect>
     </svg>,
-    condition: "Ensoleillé",
+    condition: weather,
     temperature: "35º",
     precipitation: "20 l/m²",
     wind: "15 km/h",
