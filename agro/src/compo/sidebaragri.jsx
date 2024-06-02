@@ -21,7 +21,7 @@ const sidebaragri = ({data} ) => {
       // icon: <LuShoppingBasket />
     },
     {
-      title: 'Masimboly',
+      title: 'Plantes & Parcelle',
       path: '/culture',
       // icon: <LuShoppingBasket />
     },
@@ -55,14 +55,14 @@ const sidebaragri = ({data} ) => {
           </div>
         ))}
         {/* sidebaranim */}
-        <div className="bg-red-200 w-[50%] rounded-lg mx-[25%] mt-5 transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110">
+        {/* <div className="bg-red-200 w-[50%] rounded-lg mx-[25%] mt-5 transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110">
           <button>
             . <br />. <br /> .
              <br /> . <br />.
 
           </button>
 
-        </div>
+        </div> */}
 
       </div>
       <div className='w-2/3 mb-2  h-screen'>
@@ -73,14 +73,9 @@ const sidebaragri = ({data} ) => {
           {data === 'culture' && <Culture />}
           {data === 'cultivation' && <Cultivation />}
           
-
-          
-
         </div>
 
       </div>
-
-
       <Sectionanim />
     </div>
   )

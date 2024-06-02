@@ -45,7 +45,7 @@ const animal = ({takeAnimal}) => {
                     <tr key={item.id} className="border-b hover:bg-gray-100 text-center">
                       <td className="w-1/4 px-4 py-2">{item.id}</td>
                       <td className="w-1/4 px-4 py-2">
-                      <div className='flex justify-center cursor-pointer' onClick={() => takeAnimal(item)}>
+                      <div className='flex justify-center cursor-pointer' onClick={() => takeAnimal(item)} >
                             <RiDeleteBinLine />
                           </div>
                       </td>

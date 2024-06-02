@@ -14,8 +14,9 @@ const login = () => {
       <div className='h-[90vh] flex flex-col justify-center'>
         <div className="w-1/3 flex  backdrop-filter backdrop-blur-sm rounded-lg p-5  ">
           <h3 className="intro-title text-3xl font-bold text-center text-white">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br />
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br />
+          "Optimisez votre exploitation agricole avec simplicité et efficacité <br />
+           grâce à notre application de gestion de production agricole." <br /> <br />
+           <button className='bg-[#6ea3d8] text-white text-lg font-cabin px-2 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110'>commencer</button>
             
 
           </h3>

@@ -44,9 +44,6 @@ const Sidebaranim = ({ data ,test }) => {
       icon: <GiStumpRegrowth />
     },
   
-   
-   
-
   ];
 
   const location = useLocation();
@@ -97,13 +94,12 @@ const Sidebaranim = ({ data ,test }) => {
       <div className='w-2/3  h-screen'>
         <Search />
         <div className="  h-screen bg-gray-100 ">
+
           {data === 'production' && <Production />}
           {data === 'animal' && <Animal takeAnimal={takeAnimal}/>}
           {data === 'sante' && <Sante />}
           {data === 'croissance' && <Croissance />}
           {data === 'profil' && <Profil animal={animal}/>}
-
-
 
         </div>
 

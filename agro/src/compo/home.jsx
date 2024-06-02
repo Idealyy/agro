@@ -20,7 +20,7 @@ const home = () => {
                 <div className="p-4">
                     <h2 className="text-xl font-semibold mb-2">Agriculture</h2>
                     <p className="text-gray-700 mb-4">Gestion de production agricole</p>
-                    <Link to='/sidebaragri' className="block w-full bg-[#FE9B86] hover:bg-[#f88872] text-white font-bold py-2 px-4 rounded text-center">Aller à l'agriculture</Link>
+                    <Link to='/meteo' className="block w-full bg-[#FE9B86] hover:bg-[#f88872] text-white font-bold py-2 px-4 rounded text-center">Aller à l'agriculture</Link>
                 </div>
             </div>
         </div>

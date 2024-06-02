@@ -10,6 +10,8 @@ import Sidebaragri from './compo/sidebaragri';
 import Croissance from './compo/croissance';
 import Culture from './compo/culture'
 import Profil from './compo/profil'
+import Phase from './compo/phase'
+
 
 
 
@@ -33,6 +35,8 @@ function App() {
         <Route path="/culture" element={<Sidebaragri data={"culture"} />} />
         <Route path="/meteo" element={<Sidebaragri data={"meteo"} />} />
         <Route path="/cultivation" element={<Sidebaragri data={"cultivation"} />} />
+        <Route path="/phase" element={ <Sidebaranim data={"phase"} /> }/>
+
 
 
 

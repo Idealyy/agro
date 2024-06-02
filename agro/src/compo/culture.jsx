@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaSearch } from "react-icons/fa";
+import axios from 'axios'
 
 
 import { Link } from 'react-router-dom';
@@ -15,6 +16,13 @@ const donne = [
   { id: 2, name: 'Whiskers', species: 'Cat', age: 3, health: 'Fair' },
   { id: 3, name: 'Buddy', species: 'Dog', age: 7, health: 'Excellent' },
 ];
+
+const fetch = () => {
+  axios.get('http://localhost:8080/api/agriculture/parcelle/getAll')
+ .then(res => {
+   console.log(res.data);
+ })
+}
 
 const culture = () => {
   return (
@@ -42,11 +50,11 @@ const culture = () => {
         <table className="table-fixed w-full border-collapse bg-white rounded-lg text-gray-600">
           <thead>
             <tr>
-              <th className="w-1/4 px-4 py-2 text-center">hh</th>
-              <th className="w-1/4 px-4 py-2 text-center">gg</th>
-              <th className="w-1/4 px-4 py-2 text-center">dd</th>
-              <th className="w-1/4 px-4 py-2 text-center">ff</th>
-              <th className="w-1/4 px-4 py-2 text-center">dd</th>
+              <th className="w-1/4 px-4 py-2 text-center">Type</th>
+              <th className="w-1/4 px-4 py-2 text-center">Variété</th>
+              <th className="w-1/4 px-4 py-2 text-center">Description</th>
+              <th className="w-1/4 px-4 py-2 text-center">Nombre</th>
+              <th className="w-1/4 px-4 py-2 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -95,18 +103,22 @@ const culture = () => {
           <button className="bg-[#FBB6A6] text-white text-xs font-cabin px-4 py-2 rounded-r-full transition duration-200 ease-in-out hover:-translate-y-1 hover:bg-[#6ea3d8] focus:outline-none">
             Dispo
           </button>
-          <button className="bg-[#6ea3d8] text-white text-xs font-cabin px-4 py-2 mx-4 rounded-full transition duration-200 ease-in-out hover:-translate-y-1  hover:bg-[#6ea3d8] focus:outline-none">
+          <button onClick={()=>fetch()} className="bg-[#6ea3d8] text-white text-xs font-cabin px-4 py-2 mx-4 rounded-full transition duration-200 ease-in-out hover:-translate-y-1  hover:bg-[#6ea3d8] focus:outline-none">
             AJOUTER
           </button>
         </div>
         <table className="table-fixed w-full border-collapse bg-white rounded-lg text-gray-600">
           <thead>
             <tr>
-              <th className="w-1/4 px-4 py-2 text-center">hh</th>
-              <th className="w-1/4 px-4 py-2 text-center">gg</th>
-              <th className="w-1/4 px-4 py-2 text-center">dd</th>
-              <th className="w-1/4 px-4 py-2 text-center">ff</th>
-              <th className="w-1/4 px-4 py-2 text-center">dd</th>
+              <th className="w-1/4 px-4 py-2 text-center">Référence</th>
+              <th className="w-1/4 px-4 py-2 text-center">Latitude</th>
+              <th className="w-1/4 px-4 py-2 text-center">Longitude</th>
+              <th className="w-1/4 px-4 py-2 text-center">Surface</th>
+              <th className="w-1/4 px-4 py-2 text-center">Type sol</th>
+              <th className="w-1/4 px-4 py-2 text-center">Préculture</th>
+              <th className="w-1/4 px-4 py-2 text-center">Action</th>
+
+              
             </tr>
           </thead>
           <tbody>

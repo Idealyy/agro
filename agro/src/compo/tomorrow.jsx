@@ -5,7 +5,7 @@ const Tomorrow = ({ weather }) => {
 
   const tomorrowData = {
     day: "Demain",
-    date: "30 juillet",
+    date: "12 mai",
     icon: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-24 h-24 p-2 text-yellow-400 fill-current">
       <path d="M256,104c-83.813,0-152,68.187-152,152s68.187,152,152,152,152-68.187,152-152S339.813,104,256,104Zm0,272A120,120,0,1,1,376,256,120.136,120.136,0,0,1,256,376Z"></path>
       <rect width="32" height="48" x="240" y="16"></rect>

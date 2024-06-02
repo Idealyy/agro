@@ -4,9 +4,9 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const data = [
-    { name: 'John Doe', espece: 'bovin', age: 30, q: 'bon' },
-    { name: 'Jane Smith', espece: 'bovin', age: 25, q: 'bon' },
-    { name: 'Mike Brown', espece: 'bovin', age: 40, q: 'bon' },
+    { name: 'Lait', espece: 'bovin', age: 5, q: 'bon' },
+    { name: 'fromage', espece: 'bovin', age: 25, q: 'bon' },
+    { name: ' œufs', espece: 'volaille', age: 40, q: 'bon' },
 ];
 
 const Production = () => {
@@ -36,7 +36,7 @@ const Production = () => {
                                 {data.map((item) => (
                                     <tr key={item.id} className="border-b hover:bg-gray-100 text-center">
                                         <td className="w-1/4 px-4 py-2">{item.name}</td>
-                                        <td className="w-1/4 px-4 py-2"><span>{item.name}</span></td>
+                                        <td className="w-1/4 px-4 py-2"><span>{item.espece}</span></td>
                                         <td className="w-1/4 px-4 py-2">{item.age}</td>
                                         <td className="w-1/4 px-4 py-2">{item.q}</td>
                                         <td className="w-14 px-4 py-2">
