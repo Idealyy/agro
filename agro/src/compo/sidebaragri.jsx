@@ -63,7 +63,18 @@ const sidebaragri = ({data} ) => {
           </button>
 
         </div> */}
+         <div className="bg-red-200 w-[50%] rounded-lg mx-[15%] mt-5  transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110">
+          
+          <Link to='/production' >
+          <div className='w-4 h-20'>
+          </div>
+          </Link>
 
+          
+
+          
+
+        </div>
       </div>
       <div className='w-2/3 mb-2  h-screen'>
         <Search />

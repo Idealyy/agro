@@ -33,7 +33,7 @@ const Calendar = () => {
 
   const renderDays = () => {
     return (
-      <div className="grid grid-cols-7 gap-2 text-gray-600">
+      <div className="grid grid-cols-7 gap-2 text-gray-600 font-cabin">
         {weekdays.map((day, index) => (
           <div key={index} className="text-center font-bold">
             {day}

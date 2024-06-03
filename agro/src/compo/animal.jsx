@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
-
+import { MdOutlineEmojiEmotions } from "react-icons/md";
 
 const data = [
   { id: 1, name: 'Fido', species: 'Dog', age: 5, health: 'Good' },
@@ -11,9 +11,9 @@ const data = [
   { id: 4, name: 'Nibbles', species: 'Rabbit', age: 2, health: 'Poor' },
 ];
 
-const animal = ({takeAnimal}) => {
-  
-  const [activeProfil,setactiveProfil] = useState(false);
+const animal = ({ takeAnimal }) => {
+
+  const [activeProfil, setactiveProfil] = useState(false);
 
 
 
@@ -45,21 +45,20 @@ const animal = ({takeAnimal}) => {
                     <tr key={item.id} className="border-b hover:bg-gray-100 text-center">
                       <td className="w-1/4 px-4 py-2">{item.id}</td>
                       <td className="w-1/4 px-4 py-2">
-                      <div className='flex justify-center cursor-pointer' onClick={() => takeAnimal(item)} >
-                            <RiDeleteBinLine />
-                          </div>
+                        <div className='flex justify-center cursor-pointer hover:text-yellow-400 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110' onClick={() => takeAnimal(item)} >
+                        <MdOutlineEmojiEmotions />
+                        </div>
                       </td>
                       <td className="w-1/4 px-4 py-2"><span>{item.name}</span></td>
                       <td className="w-1/4 px-4 py-2">{item.age}</td>
                       <td className="w-14 px-4 py-2">
                         <div className="flex justify-center">
-                          <div className="mr-2">
+                          <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">
                             <MdOutlineModeEdit />
                           </div>
-                          <div>
+                          <div className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer'>
                             <RiDeleteBinLine />
                           </div>
-                          
                         </div>
                       </td>
                     </tr>

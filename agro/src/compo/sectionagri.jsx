@@ -1,5 +1,6 @@
 import React from 'react'
 import Calendrier from './calendar'
+import EventForm from './eventForm'
 
 const sectionagri = () => {
   return (
@@ -17,6 +18,11 @@ const sectionagri = () => {
     </div>
     <div className='mt-16'>
     <Calendrier/>
+
+    </div>
+
+    <div className='mt-5 mx-2 w-64  '>
+    <EventForm/>
 
     </div>
     

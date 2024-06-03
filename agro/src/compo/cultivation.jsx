@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Phase from './phase';
 import { RiPlantLine } from 'react-icons/ri';
+import { MdOutlineModeEdit } from "react-icons/md";
+import { RiDeleteBinLine } from "react-icons/ri";
+
 
 const data = [
   { id: 1, plantation: 'FFF', production: 'GGG', recolte: '...', plante: '...', produit: '...', surface: '...' },
@@ -61,7 +64,12 @@ const Cultivation = () => {
                     <td className="px-4 py-2">{item.surface}</td>
                     <td className="px-4 py-2">
                       <div className="flex justify-center">
-                        {/* Ajoutez d'autres actions ici si nécessaire */}
+                        <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">
+                          <MdOutlineModeEdit />
+                        </div>
+                        <div className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer'>
+                          <RiDeleteBinLine />
+                        </div>
                       </div>
                     </td>
                   </tr>
