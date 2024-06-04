@@ -34,7 +34,7 @@ const sidebaragri = ({data} ) => {
   ];
   
   return (
-    <div className="flex overflow-hidden">
+    <div className="flex overflow-hidden h-screen">
 
       <div className="bg-white h-screen w-[18%]">
         <div className="font-cabin px-4 py-8  flex items-center justify-center  transition-colors duration-300 mb-10 ">

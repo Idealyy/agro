@@ -16,12 +16,12 @@ const sectionagri = () => {
     </button>
 
     </div>
-    <div className='mt-16'>
+    <div className='mt-20 '>
     <Calendrier/>
 
     </div>
 
-    <div className='mt-5 mx-2 w-64  '>
+    <div className='mt-2 mx-2 w-64   '>
     <EventForm/>
 
     </div>

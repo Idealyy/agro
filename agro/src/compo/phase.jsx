@@ -1,4 +1,7 @@
 import React from 'react';
+import { MdOutlineModeEdit } from "react-icons/md";
+import { RiDeleteBinLine } from "react-icons/ri";
+
 
 const data = [
     { id: 1, plantation: 'FFF', production: 'GGG', recolte: '...', plante: '...', produit: '...', surface: '...' },
@@ -31,12 +34,13 @@ const Phase = ({ cultivation }) => {
                                 </button>
                             </div>
                         </div>
-                        <table className=" table-fixed w-full mx-10 border-collapse bg-white rounded-lg text-gray-600">
+                        <table className=" table-fixed w-full  border-collapse bg-white rounded-lg text-gray-600">
                             <thead>
                                 <tr>
                                     <th className="w-1/8 px-4 py-2 text-center">Etape</th>
                                     <th className="w-1/8 px-4 py-2 text-center">date début</th>
                                     <th className="w-1/8 px-4 py-2 text-center">date fin</th>
+                                    <th className="w-1/8 px-4 py-2 text-center">besoin en eau</th>
                                     <th className="w-1/8 px-4 py-2 text-center">besoin en eau</th>
                                     <th className="w-1/8 px-4 py-2 text-center">Action</th>
                                 </tr>

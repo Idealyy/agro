@@ -22,18 +22,19 @@ const EventForm = () => {
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md font-cabin">
       <form>
-        <div className="mb-4 flex ">
-          <label className="block text-gray-700 text-lg font-bold mb-2 " htmlFor="title">
+        <h3 className='text-gray-700 font-bold '>Evénement</h3>
+        <div className="mt-2   flex ">
+          <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="title">
             Intitulé
           </label>
-          <label className="block text-gray-700 text-lg  mb-2 mx-4" htmlFor="title">
+          <label className="block text-gray-700 text-sm  mb-2 mx-4" htmlFor="title">
             {randomWord}
           </label>
          
         </div>
        
-        <div className="mb-4 flex">
-          <label className="block text-gray-700 text-sm font-bold mb-2 mr-2" htmlFor="start-time">
+        <div className="mb-1 flex">
+          <label className="block text-gray-700 text-sm font-bold  mr-0" htmlFor="start-time">
             Date début
           </label>
           <input
@@ -45,7 +46,7 @@ const EventForm = () => {
           />
         </div>
         <div className="mb-4 flex">
-          <label className="block text-gray-700 text-sm font-bold mb-2 mr-5" htmlFor="end-time">
+          <label className="block text-gray-700 text-sm font-bold  mr-3" htmlFor="end-time">
             Date fin
           </label>
           <input

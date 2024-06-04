@@ -6,7 +6,7 @@ import Sante from './sante';
 import Croissance from './croissance';
 import Sectionanim from './sectionanim';
 import Search from './searchbar';
-import { LuShoppingBasket } from "react-icons/lu"
+import { RiShoppingBasketFill } from "react-icons/ri";
 import { GiSheep } from "react-icons/gi";
 import { GiHealthNormal } from "react-icons/gi";
 import { GiStumpRegrowth } from "react-icons/gi";
@@ -26,7 +26,7 @@ const Sidebaranim = ({ data ,test }) => {
     {
       title: 'Production',
       path: '/production',
-      icon: <LuShoppingBasket />
+      icon: <RiShoppingBasketFill />
     },
     {
       title: 'Animal',
@@ -65,10 +65,10 @@ const Sidebaranim = ({ data ,test }) => {
         {SidebarData.map((item, index) => (
           <div
             key={index}
-            className={`my-4 mr-4 px-2 py-3 text-[14px]  leading-[20px] text-white text-center border-[#EDEDED]/[0.3] hover:bg-[rgb(253,224,218)] hover:rounded-r-3xl  transition-colors duration-300 ${location.pathname === item.path ? 'mr-4 bg-[#FBB6A6] rounded-r-3xl ' : ''
+            className={`my-4 mr-4 px-2 py-3 text-[14px]  leading-[20px] text-gray-500 text-center border-[#EDEDED]/[0.3] hover:bg-[rgb(253,224,218)] hover:rounded-r-3xl  transition-colors duration-300 ${location.pathname === item.path ? 'mr-4 bg-[#FBB6A6] rounded-r-3xl text-white ' : ''
               }`}
           >
-            <Link to={item.path} className=' flex px-7 font-cabin text-gray-500 text-base focus:text-white'>
+            <Link to={item.path} className=' flex px-7 font-cabin text-base'>
 
 
               <div className='mr-2'>{item.icon}</div>
