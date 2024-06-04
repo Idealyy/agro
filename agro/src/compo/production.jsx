@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoClose } from "react-icons/io5";
+import api from '../api/api'
 
 
 const data = [
@@ -13,10 +14,42 @@ const data = [
 
 const Production = () => {
     const [showPopup, setShowPopup] = useState(false);
+    const [data, setData] = useState([]);
+    const [submitData, setSubmitData] = useState([
+        {
+            type: '',
+            espece: '',
+            quantite: '',
+            qualite: '',
+        },
+    ]);
 
     const togglePopup = () => {
         setShowPopup(!showPopup);
     };
+
+    const handleChange = (e) => {
+        setSubmitData({
+            ...submitData,
+            [e.target.name]: e.target.value
+          });
+
+          console.log(submitData);
+
+    }
+
+    const handleSubmit = async () => {
+        try {
+
+            const submit = await api.post('',)
+            console.log(submit.data);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
     return (
         <div className="inline h-screen">
             <div className="overflow-x-auto rounded-lg shadow-md mx-4 transform translate-y-5 mb-4 ">
@@ -88,19 +121,9 @@ const Production = () => {
                                 <input
                                     className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                                     type="text"
-                                    name="models"
-                                // value={formData.models} 
-                                // onChange={handleChange} 
-                                />
-                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
-                                    Quantité
-                                </label>
-                                <input
-                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                                    type="text"
-                                    name="brand"
-                                // value={formData.brand} 
-                                // onChange={handleChange} 
+                                    name="type"
+                                // value={submitData.type} 
+                                onChange={handleChange} 
                                 />
                                 <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
                                     Espèce fournisseur
@@ -108,9 +131,19 @@ const Production = () => {
                                 <input
                                     className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                                     type="text"
-                                    name="brand"
+                                    name="espece"
                                 // value={formData.brand} 
-                                // onChange={handleChange} 
+                                onChange={handleChange} 
+                                />
+                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
+                                    Quantité
+                                </label>
+                                <input
+                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                    type="text"
+                                    name="quantite"
+                                // value={formData.brand} 
+                                onChange={handleChange} 
                                 />
                                 <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
                                     Qualité
@@ -118,9 +151,9 @@ const Production = () => {
                                 <input
                                     className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                                     type="text"
-                                    name="brand"
+                                    name="qualite"
                                 // value={formData.brand} 
-                                // onChange={handleChange} 
+                                onChange={handleChange} 
                                 />
 
                                 <div className="mt-6 flex items-center justify-end gap-x-6">
