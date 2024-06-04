@@ -106,220 +106,238 @@ const animal = ({ takeAnimal }) => {
                     <IoClose />
                   </button>
                   <form className="m-2">
-                    <div className=' '>
+                    <div className=''>
                       <Swiper
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
                         spaceBetween={50}
                         slidesPerView={1}
                         navigation
                         pagination={{ clickable: true }}
-                        scrollbar={{ draggable: true }}
+                        // scrollbar={{ draggable: true }}
                         onSwiper={(swiper) => console.log(swiper)}
                         onSlideChange={() => console.log('slide change')}
                       >
                         <SwiperSlide>
-                          
-                      <div className=' w-max mx-auto'>
-                        <div className="sm:col-span-3 mb-0 w-56">
-                          <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                            Nom
-                          </label>
-                          <div className="">
-                            <input
-                              type="text"
-                              name="first-name"
-                              id="first-name"
-                              autoComplete="given-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                          </div>
-                        </div>
-                        <div className="sm:col-span-3 mb-0 w-56 ">
-                          <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                            Race
-                          </label>
-                          <div className="">
-                            <input
-                              type="text"
-                              name="last-name"
-                              id="last-name"
-                              autoComplete="family-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
-                            />
-                          </div>
-                        </div>
-
-                        <div className="sm:col-span-3 w-56">
-                          <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
-                            Espèce
-                          </label>
-                          <div className="mt-2">
-                            <select
-                              id="species"
-                              name="species"
-                              autoComplete="species-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            >
-                              <option>Bovin</option>
-                              <option>Porcin</option>
-                              <option>??????</option>
-                              <option>??????</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <fieldset className="mt-3 w-56">
-                          <legend className="text-sm font-semibold leading-6 text-gray-900">Sexe</legend>
-                          <div className="flex space-x-3">
-                            <div className="flex items-center gap-x-3">
-                              <input
-                                id="male"
-                                name="sex"
-                                type="radio"
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                              <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
-                                Mâle
+                          <div className=' w-max mx-auto mb-3'>
+                            <div className="sm:col-span-3 mb-0 w-56">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Nom
                               </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="first-name"
+                                  id="first-name"
+                                  autoComplete="given-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
                             </div>
-                            <div className="flex items-center gap-x-3 ">
-                              <input
-                                id="female"
-                                name="sex"
-                                type="radio"
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                              <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
-                                Femelle
+                            <div className="sm:col-span-3 mb-0 w-56 ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Race
                               </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="last-name"
+                                  id="last-name"
+                                  autoComplete="family-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </fieldset>
 
-                        <div className="sm:col-span-3 w-56">
-                          <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
-                            Statut
-                          </label>
-                          <div className="mt-2">
-                            <select
-                              id="status"
-                              name="status"
-                              autoComplete="status-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            >
-                              <option>Acheté</option>
-                              <option>Acquis</option>
-                            </select>
-                          </div>
-                        </div>
+                            <div className="sm:col-span-3 w-56 mb-0 mt-2">
+                              <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
+                                Espèce
+                              </label>
+                              <div className="">
+                                <select
+                                  id="species"
+                                  name="species"
+                                  autoComplete="species-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option>Bovin</option>
+                                  <option>Porcin</option>
+                                  <option>Volaille</option>
+                                  <option>Caprin</option>
+                                  <option>Ovin</option>
 
-                      </div>
+                                </select>
+                              </div>
+                            </div>
+
+                            
+                            <div className="sm:col-span-3 mt-2 mb-0 w-56">
+                              <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900">
+                                Date
+                              </label>
+                              <div>
+                                <input
+                                  type="date"
+                                  name="date"
+                                  id="date"
+                                  
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
+                            </div>
+
+                            <fieldset className="mt-3 w-56">
+                              <legend className="text-sm font-semibold leading-6 text-gray-900">Sexe</legend>
+                              <div className="flex space-x-3">
+                                <div className="flex items-center gap-x-3">
+                                  <input
+                                    id="male"
+                                    name="sex"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  />
+                                  <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Mâle
+                                  </label>
+                                </div>
+                                <div className="flex items-center gap-x-3 ">
+                                  <input
+                                    id="female"
+                                    name="sex"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  />
+                                  <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Femelle
+                                  </label>
+                                </div>
+                              </div>
+                            </fieldset>
+
+
+                          </div>
                         </SwiperSlide>
                         <SwiperSlide>
-                        <div className=' w-max mx-auto'>
-                        <div className="sm:col-span-3 mb-0 w-56">
-                          <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                            Nom
-                          </label>
-                          <div className="">
-                            <input
-                              type="text"
-                              name="first-name"
-                              id="first-name"
-                              autoComplete="given-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                          </div>
-                        </div>
-                        <div className="sm:col-span-3 mb-0 w-56 ">
-                          <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                            Race
-                          </label>
-                          <div className="">
-                            <input
-                              type="text"
-                              name="last-name"
-                              id="last-name"
-                              autoComplete="family-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
-                            />
-                          </div>
-                        </div>
-
-                        <div className="sm:col-span-3 w-56">
-                          <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
-                            Espèce
-                          </label>
-                          <div className="mt-2">
-                            <select
-                              id="species"
-                              name="species"
-                              autoComplete="species-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            >
-                              <option>Bovin</option>
-                              <option>Porcin</option>
-                              <option>??????</option>
-                              <option>??????</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <fieldset className="mt-3 w-56">
-                          <legend className="text-sm font-semibold leading-6 text-gray-900">Sexe</legend>
-                          <div className="flex space-x-3">
-                            <div className="flex items-center gap-x-3">
-                              <input
-                                id="male"
-                                name="sex"
-                                type="radio"
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                              <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
-                                Mâle
+                          <div className=' w-max mx-auto'>
+                            <div className="sm:col-span-3 mb-0 w-56">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Date d'enregistrement
                               </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="first-name"
+                                  id="first-name"
+                                  autoComplete="given-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
                             </div>
-                            <div className="flex items-center gap-x-3 ">
-                              <input
-                                id="female"
-                                name="sex"
-                                type="radio"
-                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                              />
-                              <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
-                                Femelle
+                            <div className="sm:col-span-3 mb-0 w-56 ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Date de vente
                               </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="last-name"
+                                  id="last-name"
+                                  autoComplete="family-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </fieldset>
+                            <div className="sm:col-span-3 mb-0 w-56 ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Maladie, blessure, date et état de santé
+                              </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="last-name"
+                                  id="last-name"
+                                  autoComplete="family-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
-                        <div className="sm:col-span-3 w-56">
-                          <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
-                            Statut
-                          </label>
-                          <div className="mt-2">
-                            <select
-                              id="status"
-                              name="status"
-                              autoComplete="status-name"
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                            >
-                              <option>Acheté</option>
-                              <option>Acquis</option>
-                            </select>
-                          </div>
-                        </div>
+                                />
+                              </div>
+                            </div>
 
-                      </div>
+                            <div className="sm:col-span-3 w-56">
+                              <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
+                                Vaccination et date
+                              </label>
+                              <div className="mt-2">
+                                <select
+                                  id="species"
+                                  name="species"
+                                  autoComplete="species-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option>Bovin</option>
+                                  <option>Porcin</option>
+                                  <option>??????</option>
+                                  <option>??????</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <fieldset className="mt-3 w-56">
+                              <legend className="text-sm font-semibold leading-6 text-gray-900">Vermifuge</legend>
+                              <div className="flex space-x-3">
+                                <div className="flex items-center gap-x-3">
+                                  <input
+                                    id="male"
+                                    name="sex"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  />
+                                  <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Mâle
+                                  </label>
+                                </div>
+                                <div className="flex items-center gap-x-3 ">
+                                  <input
+                                    id="female"
+                                    name="sex"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  />
+                                  <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Femelle
+                                  </label>
+                                </div>
+                              </div>
+                            </fieldset>
+
+                            <div className="sm:col-span-3 w-56">
+                              <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
+                                Statut
+                              </label>
+                              <div className="mt-2">
+                                <select
+                                  id="status"
+                                  name="status"
+                                  autoComplete="status-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option>Acheté</option>
+                                  <option>Acquis</option>
+                                </select>
+                              </div>
+                            </div>
+
+                          </div>
                         </SwiperSlide>
+                        ⠀⠀⠀⠀⠀⠀⠀
+                        ⠀⠀⠀⠀⠀⠀⠀
 
-                        ...
                       </Swiper>
 
 
-                      
+
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                       <button
