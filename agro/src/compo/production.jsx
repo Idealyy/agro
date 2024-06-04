@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { IoClose } from "react-icons/io5";
+
 
 const data = [
     { name: 'Lait', espece: 'bovin', age: 5, q: 'bon' },
@@ -10,6 +12,11 @@ const data = [
 ];
 
 const Production = () => {
+    const [showPopup, setShowPopup] = useState(false);
+
+    const togglePopup = () => {
+        setShowPopup(!showPopup);
+    };
     return (
         <div className="inline h-screen">
             <div className="overflow-x-auto rounded-lg shadow-md mx-4 transform translate-y-5 mb-4 ">
@@ -17,10 +24,17 @@ const Production = () => {
                     <div className="px-4 py-4 w-full">
                         <div className="flex max-w-full mb-6">
                             <h2 className="text-xl font-cabin text-gray-600 mb-2 w-5/6">Liste des produits</h2>
-                            <button className="bg-[#6ea3d8] text-white text-xs font-cabin px-2 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#6ea3d8] focus:outline-none">
+                            <button onClick={togglePopup} className="bg-[#6ea3d8] text-white text-xs font-cabin px-2 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#6ea3d8] focus:outline-none">
                                 AJOUTER
                             </button>
+
+                            <div className="flex justify-center items-center">
+
+
+                            </div>
                         </div>
+
+
                         <table className="table-fixed w-full border-collapse bg-white rounded-lg text-gray-600 font-cabin">
                             <thead>
                                 <tr>
@@ -56,6 +70,87 @@ const Production = () => {
                     </div>
                 </div>
             </div>
+            {showPopup && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+                        <button
+                            className="text-gray-600 hover:text-gray-800 float-right mt-0"
+                            onClick={togglePopup}
+                        >
+                            <IoClose />
+
+                        </button>
+                        <div className="">
+                            <form className='m-2'>
+                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
+                                    Type de produit
+                                </label>
+                                <input
+                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                    type="text"
+                                    name="models"
+                                // value={formData.models} 
+                                // onChange={handleChange} 
+                                />
+                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
+                                    Quantité
+                                </label>
+                                <input
+                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                    type="text"
+                                    name="brand"
+                                // value={formData.brand} 
+                                // onChange={handleChange} 
+                                />
+                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
+                                    Espèce fournisseur
+                                </label>
+                                <input
+                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                    type="text"
+                                    name="brand"
+                                // value={formData.brand} 
+                                // onChange={handleChange} 
+                                />
+                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
+                                    Qualité
+                                </label>
+                                <input
+                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                                    type="text"
+                                    name="brand"
+                                // value={formData.brand} 
+                                // onChange={handleChange} 
+                                />
+
+                                <div className="mt-6 flex items-center justify-end gap-x-6">
+                                    <button
+                                        type="button"
+                                        className="text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-200 hover:rounded-full  px-3 py-2"
+                                        onClick={togglePopup}
+                                    >
+                                        ANNULER
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                    >
+                                        AJOUTER
+                                    </button>
+                                </div>
+                                {/* <button 
+              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 mt-3 rounded w-full" 
+              type="submit"
+            > */}
+                                {/* {editId ? 'Update' : 'Add'} */}
+                                {/* Submit
+            </button> */}
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            )}
 
             <div className=" w-full p-8 h-screen">
                 <div className="flex mb-8">
@@ -73,6 +168,7 @@ const Production = () => {
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }
