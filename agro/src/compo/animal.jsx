@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { MdOutlineModeEdit } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoLogIn } from "react-icons/io5";
+import url from "./../api/api"
+import axios from 'axios';
+
 
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
@@ -16,27 +19,154 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-const data = [
-  { id: 1, name: 'Fido', species: 'Dog', age: 5, health: 'Good' },
-  { id: 2, name: 'Whiskers', species: 'Cat', age: 3, health: 'Fair' },
-  { id: 3, name: 'Buddy', species: 'Dog', age: 7, health: 'Excellent' },
-  { id: 4, name: 'Nibbles', species: 'Rabbit', age: 2, health: 'Poor' },
-];
+
 
 const animal = ({ takeAnimal }) => {
 
-  const [activeProfil, setactiveProfil] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
+  const [animalData, setAnimalData] = useState({
+    nom: "",
+    espece: "Bovin",
+    race: "",
+    sexe: "",
+    date_naiss: "",
+    date_enregist: "",
+    date_vente: "",
+    date_dece: "",
+    age: "",
+    poids: "",
+    status: "Acheté"
+  });
+  const [animalSante, setAnimalSante] = useState({
+    animal_id: "",
+    vaccin: false,
+    vermifuge: false,
+    date_vacc: "",
+    date_verm: "",
+    maladie: "",
+    blessure: "",
+    date_trait: "",
+    etat: true,
+    gestation: ""
+  })
+
+  const [animalList, setAnimalList] = useState([]);
+
+  useEffect(() => {
+    fetchAnimal();
+  }, []);
+
+  const fetchAnimal = async () => {
+    try {
+      const animals = await url.get('animals')
+      setAnimalList(animals.data);
+      // console.log(animals.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAnimalData({
+      ...animalData,
+      [name]: value
+    });
+  };
+
+  const handleChangeSante = (e) => {
+    const { name, value } = e.target;
+    setAnimalSante({
+      ...animalSante,
+      [name]: value
+    });
+  };
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setAnimalSante(prevState => ({
+      ...prevState,
+      [name]: checked
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await axios.post('http://192.168.141.73:8080/api/elevage/animal/add', animalData);
+    
+    console.log(animalData);
+
+    const getTodayDate = () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    };
+
+    try {
+
+      const sendData = await url.post("addAnimal", {
+        nom: animalData.nom,
+        espece: animalData.espece,
+        race: animalData.race,
+        sexe: animalData.sexe,
+        date_naiss: animalData.date_naiss,
+        date_enregist: getTodayDate(),
+        date_vente: animalData.date_vente,
+        date_dece: animalData.date_dece,
+        age: animalData.age,
+        poids: animalData.poids,
+        status: animalData.status
+      });
+
+      console.log(sendData.data.animal_id);
+
+      setAnimalSante(prevState => ({
+        ...prevState,
+        id_animal: sendData.data.animal_id
+      }));
+
+      const animalSanteJson = JSON.stringify(animalSante);
+      console.log(animalSanteJson);
+
+      const sendSante = await url.post("animalSante", {
+        id_animal: sendData.data.animal_id,
+        vaccin: animalSante.vaccin,
+        vermifuge: animalSante.vermifuge,
+        date_vacc: animalSante.date_vacc,
+        date_verm: animalSante.date_verm,
+        maladie: animalSante.maladie,
+        blessure: animalSante.blessure,
+        date_trait: animalSante.date_trait,
+        etat: animalSante.etat,
+        gestation: animalSante.gestation
+
+      });
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+ const handleDelete = async (id) => {
+    try {
+      await url.delete(`deleteAnimal/${id}`);
+      console.log('Colonne supprimée avec succès');
+      fetchAnimal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
-
-
   return (
     <div className="flex h-screen">
+
       <div className="w-full p-8 h-screen ">
         {/* tableau */}
         <div className=" font-cabin overflow-x-auto rounded-lg shadow-md">
@@ -49,41 +179,43 @@ const animal = ({ takeAnimal }) => {
                 </button>
 
               </div>
-              <table className="table-fixed w-full border-collapse bg-white rounded-lg text-gray-600">
-                <thead>
-                  <tr>
-                    <th className="w-1/4 px-4 py-2 text-center">ID</th>
-                    <th className="w-1/4 px-4 py-2 text-center">Profile</th>
-                    <th className="w-1/4 px-4 py-2 text-center">Nom</th>
-                    <th className="w-1/4 px-4 py-2 text-center">Âge</th>
-                    <th className="w-1/4 px-4 py-2 text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item) => (
-                    <tr key={item.id} className="border-b hover:bg-gray-100 text-center">
-                      <td className="w-1/4 px-4 py-2">{item.id}</td>
-                      <td className="w-1/4 px-4 py-2">
-                        <div className='flex justify-center cursor-pointer hover:text-yellow-400 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110' onClick={() => takeAnimal(item)} >
-                          <MdOutlineEmojiEmotions />
-                        </div>
-                      </td>
-                      <td className="w-1/4 px-4 py-2"><span>{item.name}</span></td>
-                      <td className="w-1/4 px-4 py-2">{item.species}</td>
-                      <td className="w-14 px-4 py-2">
-                        <div className="flex justify-center">
-                          <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">
-                            <MdOutlineModeEdit />
-                          </div>
-                          <div className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer'>
-                            <RiDeleteBinLine />
-                          </div>
-                        </div>
-                      </td>
+              <div className='h-[30vh] overflow-y-scroll'>
+                <table className="table-fixed  w-full border-collapse bg-white rounded-lg text-gray-600">
+                  <thead>
+                    <tr>
+                      <th className="w-1/4 px-4 py-2 text-center">Espece</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Profile</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Nom</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Âge</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {animalList.map((item) => (
+                      <tr key={item.id_animal} className="border-b hover:bg-gray-100 text-center">
+                        <td className="w-1/4 px-4 py-2">{item.espece}</td>
+                        <td className="w-1/4 px-4 py-2">
+                          <div className='flex justify-center cursor-pointer hover:text-yellow-400 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110' onClick={() => takeAnimal(item)} >
+                            <MdOutlineEmojiEmotions />
+                          </div>
+                        </td>
+                        <td className="w-1/4 px-4 py-2 hover:"><Link to="/sante"><span>{item.nom}</span></Link></td>
+                        <td className="w-1/4 px-4 py-2">{item.sexe}</td>
+                        <td className="w-14 px-4 py-2">
+                          <div className="flex justify-center">
+                            <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">
+                              <MdOutlineModeEdit />
+                            </div>
+                            <div onClick={() => handleDelete(item.id_animal)} className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer'>
+                              <RiDeleteBinLine />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -105,7 +237,7 @@ const animal = ({ takeAnimal }) => {
                   >
                     <IoClose />
                   </button>
-                  <form className="m-2">
+                  <form className="m-2" onSubmit={handleSubmit} >
                     <div className=''>
                       <Swiper
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -127,8 +259,9 @@ const animal = ({ takeAnimal }) => {
                               <div className="">
                                 <input
                                   type="text"
-                                  name="first-name"
-                                  id="first-name"
+                                  name="nom"
+                                  value={animalData.nom}
+                                  onChange={handleChange}
                                   autoComplete="given-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -141,8 +274,9 @@ const animal = ({ takeAnimal }) => {
                               <div className="">
                                 <input
                                   type="text"
-                                  name="last-name"
-                                  id="last-name"
+                                  name="race"
+                                  value={animalData.race}
+                                  onChange={handleChange}
                                   autoComplete="family-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
@@ -156,8 +290,9 @@ const animal = ({ takeAnimal }) => {
                               </label>
                               <div className="">
                                 <select
-                                  id="species"
-                                  name="species"
+                                  name="espece"
+                                  value={animalData.espece}
+                                  onChange={handleChange}
                                   autoComplete="species-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
@@ -171,17 +306,18 @@ const animal = ({ takeAnimal }) => {
                               </div>
                             </div>
 
-                            
+
                             <div className="sm:col-span-3 mt-2 mb-0 w-56">
                               <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900">
-                                Date
+                                Date de Naissance
                               </label>
                               <div>
                                 <input
                                   type="date"
-                                  name="date"
-                                  id="date"
-                                  
+                                  name="date_naiss"
+                                  value={animalData.date_naiss}
+                                  onChange={handleChange}
+
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
@@ -192,8 +328,9 @@ const animal = ({ takeAnimal }) => {
                               <div className="flex space-x-3">
                                 <div className="flex items-center gap-x-3">
                                   <input
-                                    id="male"
-                                    name="sex"
+                                    name="sexe"
+                                    value={"Mâle"}
+                                    onChange={handleChange}
                                     type="radio"
                                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                   />
@@ -203,8 +340,9 @@ const animal = ({ takeAnimal }) => {
                                 </div>
                                 <div className="flex items-center gap-x-3 ">
                                   <input
-                                    id="female"
-                                    name="sex"
+                                    name="sexe"
+                                    value={"Femelle"}
+                                    onChange={handleChange}
                                     type="radio"
                                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                                   />
@@ -222,95 +360,108 @@ const animal = ({ takeAnimal }) => {
                           <div className=' w-max mx-auto'>
                             <div className="sm:col-span-3 mb-0 w-56">
                               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Date d'enregistrement
+                                Poids
                               </label>
-                              <div className="">
+                              <div>
                                 <input
                                   type="text"
-                                  name="first-name"
-                                  id="first-name"
-                                  autoComplete="given-name"
+                                  name="poids"
+                                  value={animalData.poids}
+                                  onChange={handleChange}
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
                             </div>
-                            <div className="sm:col-span-3 mb-0 w-56 ">
+
+
+                            
+                              <div className="sm:col-span-3 mb-0 my-2 w-20 flex  ">
+                                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900 mx-3">
+                                  Vermifuge
+                                </label>
+                                <div className="">
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer"
+                                      name="vermifuge"
+                                      value={animalSante.vermifuge}
+                                      onChange={handleCheckboxChange}
+                                    />
+                                    <div class="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-12 h-6  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✕']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-5 after:w-5 after:top-0.5 after:left-0.5 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✓'] peer-hover:after:scale-85 peer-checked:after:rotate-0">
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+
+
+                              <div className="sm:col-span-3 my-2 w-56 flex">
+                                <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900 mx-2">
+                                  Vaccination
+                                </label>
+                                <div className="">
+                                  <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer"
+                                      name="vaccin"
+                                      value={animalSante.vaccin}
+                                      onChange={handleCheckboxChange}
+                                    />
+                                    <div class="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-12 h-6  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✕']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-5 after:w-5 after:top-0.5 after:left-0.5 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✓'] peer-hover:after:scale-85 peer-checked:after:rotate-0">
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+
+                            <div className="sm:col-span-3 mb-0 w-60 ">
                               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Date de vente
+                                Etat
                               </label>
                               <div className="">
-                                <input
-                                  type="text"
-                                  name="last-name"
-                                  id="last-name"
-                                  autoComplete="family-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
-                                />
-                              </div>
-                            </div>
-                            <div className="sm:col-span-3 mb-0 w-56 ">
-                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Maladie, blessure, date et état de santé
-                              </label>
-                              <div className="">
-                                <input
-                                  type="text"
-                                  name="last-name"
-                                  id="last-name"
-                                  autoComplete="family-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
-                                />
-                              </div>
-                            </div>
-
-                            <div className="sm:col-span-3 w-56">
-                              <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
-                                Vaccination et date
-                              </label>
-                              <div className="mt-2">
                                 <select
-                                  id="species"
-                                  name="species"
+                                  name="etat"
+                                  value={animalSante.etat}
+                                  onChange={handleChangeSante}
                                   autoComplete="species-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
-                                  <option>Bovin</option>
-                                  <option>Porcin</option>
-                                  <option>??????</option>
-                                  <option>??????</option>
+                                  <option value={true}>En bonne santé</option>
+                                  <option value={false}>En traitement</option>
                                 </select>
                               </div>
                             </div>
+                            <div className="flex space-x-1  ">
+                            <div className="sm:col-span-3 mb-0 w-28  ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Maladie
+                              </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="maladie"
+                                  value={animalSante.maladie}
+                                  onChange={handleChangeSante}
+                                  autoComplete="family-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 
-                            <fieldset className="mt-3 w-56">
-                              <legend className="text-sm font-semibold leading-6 text-gray-900">Vermifuge</legend>
-                              <div className="flex space-x-3">
-                                <div className="flex items-center gap-x-3">
-                                  <input
-                                    id="male"
-                                    name="sex"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                  />
-                                  <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Mâle
-                                  </label>
-                                </div>
-                                <div className="flex items-center gap-x-3 ">
-                                  <input
-                                    id="female"
-                                    name="sex"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                  />
-                                  <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Femelle
-                                  </label>
-                                </div>
+                                />
                               </div>
-                            </fieldset>
+                            </div>
+                            <div className="sm:col-span-3 mb-0 w-28  ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Blessure
+                              </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="blessure"
+                                  value={animalSante.blessure}
+                                  onChange={handleChangeSante}
+                                  autoComplete="family-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+                                />
+                              </div>
+                            </div>
+                            </div>
+
 
                             <div className="sm:col-span-3 w-56">
                               <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
@@ -318,8 +469,9 @@ const animal = ({ takeAnimal }) => {
                               </label>
                               <div className="mt-2">
                                 <select
-                                  id="status"
                                   name="status"
+                                  value={animalData.status}
+                                  onChange={handleChange}
                                   autoComplete="status-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
@@ -349,6 +501,7 @@ const animal = ({ takeAnimal }) => {
                       </button>
                       <button
                         type="submit"
+                        
                         className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
                         AJOUTER
@@ -363,7 +516,7 @@ const animal = ({ takeAnimal }) => {
         )}
 
         {/* //diagrame */}
-        <div className="flex mt-8">
+        {/* <div className="flex mt-8">
           <div className="bg-[(#483D31] w-1/2 rounded-lg shadow-md mr-4 hover:scale-105 transition duration-300 ease-out">
             <div className="p-4">
               <h2 className="text-xl font-cabin mb-2">Diagramme 2</h2>
@@ -375,8 +528,8 @@ const animal = ({ takeAnimal }) => {
               <h2 className="text-xl font-cabin mb-2">Diagrame1</h2>
               <p className="text-gray-700 font-cabin">Contenu de la diagrame 2 ici...</p>
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
 
 

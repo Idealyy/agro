@@ -1,21 +1,11 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-const profil = ({animal}) => {
-  const data = [
-    {
-      nom: "Labrador",
-      espece: "Chien",
-      race: "Labrador Retriever",
-      date_naiss: "2020-01-15",
-      sexe: "M",
-      statut: "Disponible",
-      date_entree: "2021-03-12",
-      date_vente: "2022-04-10",
-      age: 2,
-      poids: 30,
-    },
-  ];
+const profil = ({item}) => {
+  
+  useEffect(() => {
+console.log(item);
+  })
     // const data = [
     //     { id: 1, name: 'Fido', species: 'Dog', age: 5, health: 'Good' },
     //     { id: 2, name: 'Whiskers', species: 'Cat', age: 3, health: 'Fair' },
@@ -27,10 +17,14 @@ const profil = ({animal}) => {
     <>
     <Link to='/animal'>Retour</Link>
         <div>
-          {animal.name}
-          {animal.species}
-          {animal.age}
-          {animal.health}
+          {/* {item.nom}
+          {item.espece}
+          {item.date_naiss}
+          {item.date_vente}
+          {item.date_enregist}
+          {item.poids} */}
+
+          
 
           <h1>Tableau des Animaux</h1>
       <table>
@@ -49,8 +43,7 @@ const profil = ({animal}) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr key={index}>
+            <tr key={item.id_animal}>
               <td>{item.nom}</td>
               <td>{item.espece}</td>
               <td>{item.race}</td>
@@ -61,8 +54,7 @@ const profil = ({animal}) => {
               <td>{item.date_vente}</td>
               <td>{item.age}</td>
               <td>{item.poids}</td>
-            </tr>
-          ))}
+            </tr> 
         </tbody>
       </table>
         </div>

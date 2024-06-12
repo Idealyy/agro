@@ -99,7 +99,7 @@ const Sidebaranim = ({ data ,test }) => {
           {data === 'animal' && <Animal takeAnimal={takeAnimal}/>}
           {data === 'sante' && <Sante />}
           {data === 'croissance' && <Croissance />}
-          {data === 'profil' && <Profil animal={animal}/>}
+          {data === 'profil' && <Profil item={animal}/>}
 
         </div>
 

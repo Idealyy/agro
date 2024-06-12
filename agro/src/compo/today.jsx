@@ -6,7 +6,7 @@ const today = ({ weather }) => {
 
     const todayData = {
         day: "Aujourd'hui",
-        date: "11 mai",
+        date: "10 juin",
         icon:
             <svg class="h-20" viewBox="0 0 81 73" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

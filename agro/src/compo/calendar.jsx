@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Calendar = () => {
+  // const [dataEvent, setDataEvent]= useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // useEffect(() =>
+  //   {
+  //   showEvent();
+
+  //   }
+  // )
 
   const weekdays = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
   const months = [
@@ -64,7 +72,7 @@ const Calendar = () => {
         key={index}
         className={`text-center cursor-pointer hover:rounded-full hover:bg-[#FBB6A6]  p-1 ${
           isSameDay(day, new Date()) ? 'rounded-full bg-gray-200 ' : ''
-        } ${isSameDay(day, selectedDate) ? 'font-bold' : ''}`}
+        } ${isSameDay(day, selectedDate) ? 'font-bold rounded-full bg-[#FBB6A6]' : ''}`}
         onClick={() => handleDateClick(day)}
       >
         {day.getDate()}
@@ -84,6 +92,14 @@ const Calendar = () => {
     setSelectedDate(new Date(date));
 
   };
+
+  // const showEvent = () => {
+  //   axios.get('/api/').then(response =>{
+  //     setDataEvent(response.data);
+  //     console.log(response.data);
+  //   })
+
+  // }
 
   const isSameDay = (date1, date2) => {
     return (
