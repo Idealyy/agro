@@ -38,11 +38,20 @@ const Production = () => {
 
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
 
-            const submit = await api.post('',)
-            console.log(submit.data);
+            const submit = await api.post('/api/elevage/produit/addProduit',
+                {
+                    "type_produit":"Lait",
+                    "quantite":"4.10",
+                    "qualite":"1",
+                    "date_prod":"2024-06-09"
+                    // "especef":"bovin"
+                }
+            )
+            console.log(submit);
 
         } catch (error) {
             console.error(error);
@@ -166,6 +175,7 @@ const Production = () => {
                                     </button>
                                     <button
                                         type="submit"
+                                        onClick={handleSubmit}
                                         className="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                     >
                                         AJOUTER

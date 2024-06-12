@@ -2,59 +2,55 @@ import React, { useState, useEffect } from 'react';
 
 const EventForm = () => {
 
-    const words = ["idealy", "miora", "damiora"];
-  const [randomWord, setRandomWord] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  
 
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * words.length);
-    setRandomWord(words[randomIndex]);
-
-    const now = new Date();
-    const start = now.toISOString().slice(0, 16);
-    const end = new Date(now.getTime() + 60 * 60 * 1000).toISOString().slice(0, 16);
-
-    setStartDate(start);
-    setEndDate(end);
-  }, []);
+ 
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md font-cabin">
       <form>
-        <h3 className='text-gray-700 font-bold '>Evénement</h3>
+       <div className='flex space-x-16 justify-center items-center'>
+       <h3 className='text-gray-700 font-bold '>Evénement</h3>
+        <div className='rounded-full bg-blue-500 w-6 h-6 text-4xl  end-1'>
+          +
+        </div>
+       </div>
         <div className="mt-2   flex ">
           <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="title">
             Intitulé
           </label>
           <label className="block text-gray-700 text-sm  mb-2 mx-4" htmlFor="title">
-            {randomWord}
+            
           </label>
          
         </div>
        
-        <div className="mb-1 flex">
-          <label className="block text-gray-700 text-sm font-bold  mr-0" htmlFor="start-time">
-            Date début
+        <div className="flex ">
+         <div>
+         <label className=" text-gray-700 text-sm font-bold " htmlFor="start-time">
+            Début
           </label>
+         </div>
+          <div>
           <input
             id="start-time"
             type="datetime-local"
-            value={startDate}
+            // value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+            className="w-full px-2 py-2  rounded-md focus:outline-none  focus:border-blue-300"
           />
+          </div>
         </div>
-        <div className="mb-4 flex">
-          <label className="block text-gray-700 text-sm font-bold  mr-3" htmlFor="end-time">
-            Date fin
+        <div className=" flex">
+          <label className=" text-gray-700 text-sm font-bold " htmlFor="end-time">
+            Fin
           </label>
           <input
             id="end-time"
             type="datetime-local"
-            value={endDate}
+            // value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+            className="w-full px-3 py-2  rounded-md focus:outline-none  focus:border-blue-300"
           />
         </div>
        
