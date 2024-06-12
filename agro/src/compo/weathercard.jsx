@@ -12,16 +12,14 @@ const WeatherCard = ({ day, date, icon, condition, temperature, precipitation, w
         </div>
         <p className="text-gray-700 mb-2">{condition}</p>
         <div className="text-3xl font-bold text-gray-900 mb-6">
-          {temperature}
-          <span className="font-normal text-gray-700 mx-1">/</span>
-          20º
+          {temperature}°C
         </div>
         <div className="flex justify-between w-full">
           <div className="flex items-center text-gray-500 px-2">
-            {precipitation}
+            {precipitation}%
           </div>
           <div className="flex items-center text-gray-500 px-2">
-            {wind}
+            {wind} m/s
           </div>
         </div>
       </div>

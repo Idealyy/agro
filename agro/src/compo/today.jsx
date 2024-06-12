@@ -1,5 +1,6 @@
-import React from 'react'
+
 import WeatherCard from './weathercard';
+import React, { useState, useEffect } from 'react';
 
 const today = ({ weather }) => {
 
@@ -21,31 +22,56 @@ const today = ({ weather }) => {
                 </g>
             </svg>,
         condition: weather,
-        temperature: "32º",
-        precipitation: "100 l/m²",
-        wind: "20 km/h",
     };
+
+    const [forecastData, setForecastData] = useState(null);
+
+    useEffect(() => {
+        const fetchWeatherForecast = async () => {
+        const API_KEY = '3604dfeab381085661ccc37d5e09ff28'; // Remplacez par votre propre clé API
+        const latitude = '-21.446951'; // Exemple de latitude (Paris)
+        const longitude = '47.087212'; // Exemple de longitude (Paris)
+        const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&lang=fr&appid=${API_KEY}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+            throw new Error('Failed to fetch weather forecast');
+            }
+            const data = await response.json();
+            setForecastData(data);
+        } catch (error) {
+            console.error('Error fetching weather forecast:', error);
+        }
+        };
+
+        fetchWeatherForecast();
+    }, []);
 
     return (
         <div>
             <div className={`flex justify-center space-x-10 rounded-3xl bg-white
-       ${weather == 'Partiellement nuageux' && `shadow-blue-300`}
-       ${weather == 'Ensoleillé' && `shadow-yellow-400`}
-       ${weather == 'Orageux' && `shadow-gray-800`}
-       ${weather == 'pluvieux' && `shadow-gray-400`}
-       shadow-xl transition duration-200 ease-in-out hover:translate-y-5 `}>
-                <WeatherCard
-                    day={todayData.day}
-                    date={todayData.date}
-                    icon={todayData.icon}
-                    condition={todayData.condition}
-                    temperature={todayData.temperature}
-                    precipitation={todayData.precipitation}
-                    wind={todayData.wind}
-                />
+                ${weather == 'Partiellement nuageux' && `shadow-blue-300`}
+                ${weather == 'Ensoleillé' && `shadow-yellow-400`}
+                ${weather == 'Orageux' && `shadow-gray-800`}
+                ${weather == 'pluvieux' && `shadow-gray-400`}
+                shadow-xl transition duration-200 ease-in-out hover:translate-y-5 `}>
+
+                {forecastData && (    
+                    <WeatherCard
+                        day={todayData.day}
+                        date= {new Date(forecastData.list[0].dt_txt).toLocaleDateString()}
+                        icon={todayData.icon}
+                        condition={forecastData.list[0].weather[0].description}
+                        temperature={(forecastData.list[0].main.temp - 273.15).toFixed(0)}
+                        precipitation={forecastData.list[0].pop * 100}
+                        wind={forecastData.list[0].wind.speed}
+                    />
+                )}
             </div>
         </div>
     )
 }
 
 export default today
+
