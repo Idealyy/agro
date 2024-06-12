@@ -27,7 +27,7 @@ const animal = ({ takeAnimal }) => {
 
   const [animalData, setAnimalData] = useState({
     nom: "",
-    espece: "Bovin",
+    espece: "",
     race: "",
     sexe: "",
     datenaiss: "",
@@ -36,7 +36,7 @@ const animal = ({ takeAnimal }) => {
     date_dece: "",
     age: "",
     poids: "",
-    statut: "Acheté"
+    statut: ""
   });
   const [animalSante, setAnimalSante] = useState({
     animal_id: "",
@@ -94,16 +94,16 @@ const animal = ({ takeAnimal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post('http://localhost:8080/api/elevage/animal/add', animalData);
+    // const response = await axios.post('http://localhost:8080/api/elevage/animal/add', animalData);
     
-    console.log(response.animalData);
+    // console.log(response.animalData);
 
     const getTodayDate = () => {
       const today = new Date();
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, '0');
       const dd = String(today.getDate()).padStart(2, '0');
-      return `${yyyy}-${mm}-${dd}`;
+      return `${dd}-${mm}-${yyyy}`;
     };
 
     try {
@@ -113,13 +113,13 @@ const animal = ({ takeAnimal }) => {
         espece: animalData.espece,
         race: animalData.race,
         sexe: animalData.sexe,
-        datenaiss: animalData.date_naiss,
+        datenaiss: animalData.datenaiss,
         date_enre: getTodayDate(),
         date_vente: animalData.date_vente,
         date_dece: animalData.date_dece,
         age: animalData.age,
         poids: animalData.poids,
-        statut: animalData.status,
+        statut: animalData.statut,
         vaccin: animalSante.vaccin,
         vermifuge: animalSante.vermifuge,
         date_vacc: animalSante.date_vacc,
@@ -325,7 +325,7 @@ const animal = ({ takeAnimal }) => {
                               <div>
                                 <input
                                   type="date"
-                                  name="date_naiss"
+                                  name="datenaiss"
                                   value={animalData.datenaiss}
                                   onChange={handleChange}
 
