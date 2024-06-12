@@ -16,6 +16,16 @@ import  Profil from './profil'
 
 const Sidebaranim = ({ data ,test }) => {
 
+   const [active, setActive]= useState('sideBar')
+    //function to toggle Bar
+    const showNav =()=>{
+        setActive('sideBar activeSidebar')
+    }
+     //function to remove Bar
+     const removeNavbar =()=>{
+        setActive('sideBar')
+    }
+
    console.log(test)
   const SidebarData = [
     {
@@ -58,6 +68,7 @@ const Sidebaranim = ({ data ,test }) => {
   return (
     <div className="flex overflow-hidden ">
 
+      <div className=''>
       <div className="bg-white h-screen w-[18%] justify-center">
         <div className=" font-cabin px-4 py-9  flex items-center justify-center  transition-colors duration-300 mb-10">
           <p className='font-cabin text-gray-500 text-2xl'>ELEVAGE</p>
@@ -90,6 +101,7 @@ const Sidebaranim = ({ data ,test }) => {
 
         </div>
 
+      </div>
       </div>
       <div className='w-2/3  h-screen'>
         <Search />

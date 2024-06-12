@@ -30,13 +30,13 @@ const animal = ({ takeAnimal }) => {
     espece: "Bovin",
     race: "",
     sexe: "",
-    date_naiss: "",
-    date_enregist: "",
+    datenaiss: "",
+    date_enre: "",
     date_vente: "",
     date_dece: "",
     age: "",
     poids: "",
-    status: "Acheté"
+    statut: "Acheté"
   });
   const [animalSante, setAnimalSante] = useState({
     animal_id: "",
@@ -47,7 +47,8 @@ const animal = ({ takeAnimal }) => {
     maladie: "",
     blessure: "",
     date_trait: "",
-    etat: true,
+    traitement: "",
+    // etat: true,
     gestation: ""
   })
 
@@ -93,9 +94,9 @@ const animal = ({ takeAnimal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post('http://192.168.141.73:8080/api/elevage/animal/add', animalData);
+    const response = await axios.post('http://localhost:8080/api/elevage/animal/add', animalData);
     
-    console.log(animalData);
+    console.log(response.animalData);
 
     const getTodayDate = () => {
       const today = new Date();
@@ -107,43 +108,53 @@ const animal = ({ takeAnimal }) => {
 
     try {
 
-      const sendData = await url.post("addAnimal", {
+      const sendData = await axios.post('http://localhost:8080/api/elevage/animal/add', {
         nom: animalData.nom,
         espece: animalData.espece,
         race: animalData.race,
         sexe: animalData.sexe,
-        date_naiss: animalData.date_naiss,
-        date_enregist: getTodayDate(),
+        datenaiss: animalData.date_naiss,
+        date_enre: getTodayDate(),
         date_vente: animalData.date_vente,
         date_dece: animalData.date_dece,
         age: animalData.age,
         poids: animalData.poids,
-        status: animalData.status
-      });
-
-      console.log(sendData.data.animal_id);
-
-      setAnimalSante(prevState => ({
-        ...prevState,
-        id_animal: sendData.data.animal_id
-      }));
-
-      const animalSanteJson = JSON.stringify(animalSante);
-      console.log(animalSanteJson);
-
-      const sendSante = await url.post("animalSante", {
-        id_animal: sendData.data.animal_id,
+        statut: animalData.status,
         vaccin: animalSante.vaccin,
         vermifuge: animalSante.vermifuge,
         date_vacc: animalSante.date_vacc,
         date_verm: animalSante.date_verm,
         maladie: animalSante.maladie,
         blessure: animalSante.blessure,
+        traitement: animalSante.traitement,
         date_trait: animalSante.date_trait,
-        etat: animalSante.etat,
+        // etat: animalSante.etat,
         gestation: animalSante.gestation
-
       });
+
+      console.log(sendData.data.animal_id);
+
+      // setAnimalSante(prevState => ({
+      //   ...prevState,
+      //   id_animal: sendData.data.animal_id
+      // }));
+
+      // const animalSanteJson = JSON.stringify(animalSante);
+      // console.log(animalSanteJson);
+
+      // const sendSante = await axios.post("animalSante", {
+      //   id_animal: sendData.data.animal_id,
+      //   vaccin: animalSante.vaccin,
+      //   vermifuge: animalSante.vermifuge,
+      //   date_vacc: animalSante.date_vacc,
+      //   date_verm: animalSante.date_verm,
+      //   maladie: animalSante.maladie,
+      //   blessure: animalSante.blessure,
+      //   date_trait: animalSante.date_trait,
+      //   etat: animalSante.etat,
+      //   gestation: animalSante.gestation
+
+      // });
 
     } catch (error) {
       console.log(error);
@@ -315,7 +326,7 @@ const animal = ({ takeAnimal }) => {
                                 <input
                                   type="date"
                                   name="date_naiss"
-                                  value={animalData.date_naiss}
+                                  value={animalData.datenaiss}
                                   onChange={handleChange}
 
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -329,7 +340,7 @@ const animal = ({ takeAnimal }) => {
                                 <div className="flex items-center gap-x-3">
                                   <input
                                     name="sexe"
-                                    value={"Mâle"}
+                                    value={"male"}
                                     onChange={handleChange}
                                     type="radio"
                                     className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
@@ -417,7 +428,7 @@ const animal = ({ takeAnimal }) => {
                               <div className="">
                                 <select
                                   name="etat"
-                                  value={animalSante.etat}
+                                  value={animalSante.traitement}
                                   onChange={handleChangeSante}
                                   autoComplete="species-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
@@ -470,7 +481,7 @@ const animal = ({ takeAnimal }) => {
                               <div className="mt-2">
                                 <select
                                   name="status"
-                                  value={animalData.status}
+                                  value={animalData.statut}
                                   onChange={handleChange}
                                   autoComplete="status-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
