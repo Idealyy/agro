@@ -1,6 +1,7 @@
 import React from 'react';
 
 const EventForm = () => {
+
     return (
         <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Nouvel événement</h2>

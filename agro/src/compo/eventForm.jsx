@@ -1,61 +1,45 @@
 import React, { useState, useEffect } from 'react';
+import {  FaPlus } from 'react-icons/fa';
+import { RxCross2 } from "react-icons/rx";
+import NewEvent from "./newEvent"
 
-const EventForm = () => {
+const EventForm = ({ evenement }) => {
 
-  
-
- 
+  const [closeModal, setCloseModal] = useState(true);
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md font-cabin">
-      <form>
-       <div className='flex space-x-16 justify-center items-center'>
-       <h3 className='text-gray-700 font-bold '>Evénement</h3>
-        <div className='rounded-full bg-blue-500 w-6 h-6 text-4xl  end-1'>
-          +
+      <div className='flex justify-between items-center'>
+        <h2 className="text-gray-700 font-bold">Filtered Events</h2>
+        <div className='bg-blue-300 p-2 rounded-md' onClick={() => setCloseModal(false)}>
+          <FaPlus />
         </div>
-       </div>
-        <div className="mt-2   flex ">
-          <label className="block text-gray-700 text-sm font-bold mb-2 " htmlFor="title">
-            Intitulé
-          </label>
-          <label className="block text-gray-700 text-sm  mb-2 mx-4" htmlFor="title">
-            
-          </label>
-         
-        </div>
-       
-        <div className="flex ">
-         <div>
-         <label className=" text-gray-700 text-sm font-bold " htmlFor="start-time">
-            Début
-          </label>
-         </div>
-          <div>
-          <input
-            id="start-time"
-            type="datetime-local"
-            // value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full px-2 py-2  rounded-md focus:outline-none  focus:border-blue-300"
-          />
+      </div>
+      <ul>
+        {evenement.length > 0 ? (
+          evenement.map(e => (
+            <div key={e.id_calendrier} className="bg-gray-100 p-2 my-2 rounded">
+              <div className="font-semibold">{e.activite}</div>
+              <div>Début : {new Date(e.date_debut).toLocaleString()}</div>
+              <div>Fin : {e.date_fin ? new Date(e.date_fin).toLocaleString() : "N/A"}</div>
+            </div>
+          ))
+        ) : (
+          <div className="text-gray-500">Aucun événement trouvé pour la date sélectionnée.</div>
+        )}
+      </ul>
+
+      {
+        !closeModal && (
+          <div className='absolute justify-center flex items-center w-screen h-screen z-20 top-0 left-0 bg-black bg-opacity-70'>
+            <div className='absolute right-10 top-10 text-white text-2xl hover:rotate-180 transition-all' onClick={() => setCloseModal(true)}><RxCross2 /></div>
+            <div className=''>
+              <NewEvent />
+            </div>
           </div>
-        </div>
-        <div className=" flex">
-          <label className=" text-gray-700 text-sm font-bold " htmlFor="end-time">
-            Fin
-          </label>
-          <input
-            id="end-time"
-            type="datetime-local"
-            // value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-full px-3 py-2  rounded-md focus:outline-none  focus:border-blue-300"
-          />
-        </div>
-       
-        
-      </form>
+        )
+      }
+
     </div>
   );
 };

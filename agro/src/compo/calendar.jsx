@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-const Calendar = () => {
-  // const [dataEvent, setDataEvent]= useState([]);
+const Calendar = ({ getDate }) => {
+
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  // useEffect(() =>
-  //   {
-  //   showEvent();
-
-  //   }
-  // )
 
   const weekdays = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
   const months = [
@@ -29,12 +22,12 @@ const Calendar = () => {
 
   const renderHeader = () => {
     return (
-      <div className="flex text-white  font-cabin justify-between items-center mb-5">
+      <div className="flex text-white font-cabin justify-between items-center mb-5">
         <button className='text-2xl' onClick={prevMonth}>&lt;</button>
         <h1 className="text-2xl">
           {months[selectedDate.getMonth()]} {selectedDate.getFullYear()}
         </h1>
-        <button className='text-2xl ' onClick={nextMonth}>&gt;</button>
+        <button className='text-2xl' onClick={nextMonth}>&gt;</button>
       </div>
     );
   };
@@ -70,9 +63,8 @@ const Calendar = () => {
     return days.map((day, index) => (
       <div
         key={index}
-        className={`text-center cursor-pointer hover:rounded-full hover:bg-[#FBB6A6]  p-1 ${
-          isSameDay(day, new Date()) ? 'rounded-full bg-gray-200 ' : ''
-        } ${isSameDay(day, selectedDate) ? 'font-bold rounded-full bg-[#FBB6A6]' : ''}`}
+        className={`text-center cursor-pointer hover:rounded-full hover:bg-[#FBB6A6] p-1 ${isSameDay(day, new Date()) ? 'rounded-full bg-gray-200 ' : ''
+          } ${isSameDay(day, selectedDate) ? 'font-bold rounded-full bg-[#FBB6A6]' : ''}`}
         onClick={() => handleDateClick(day)}
       >
         {day.getDate()}
@@ -89,17 +81,13 @@ const Calendar = () => {
   };
 
   const handleDateClick = (date) => {
-    setSelectedDate(new Date(date));
-
+    const selected = new Date(date);
+    setSelectedDate(selected);
+    const dateSelected = selected.getFullYear() + "-" + String(selected.getMonth() + 1).padStart(2, '0') + "-" + String(selected.getDate()).padStart(2, '0');
+    console.log(dateSelected);
+    
+    getDate(dateSelected);
   };
-
-  // const showEvent = () => {
-  //   axios.get('/api/').then(response =>{
-  //     setDataEvent(response.data);
-  //     console.log(response.data);
-  //   })
-
-  // }
 
   const isSameDay = (date1, date2) => {
     return (
@@ -110,7 +98,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="container mx-auto sm:">
+    <div className="container mx-auto">
       {renderHeader()}
       {renderDays()}
     </div>
@@ -118,19 +106,3 @@ const Calendar = () => {
 };
 
 export default Calendar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

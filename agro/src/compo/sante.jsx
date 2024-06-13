@@ -42,10 +42,6 @@ const sante = () => {
     }
   }
 
-
-
-
-
   return (
     <div>
       <div className=" w-full p-5 h-screen  ">

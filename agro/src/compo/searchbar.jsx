@@ -5,7 +5,7 @@ import { FaSearch } from "react-icons/fa";
 
 const searchbar = () => {
   return (
-    <div className="h-14 w-full  bg-gray-100 backdrop-blur-md backdrop-filter overflow-hidden flex items-center justify-between px-4 py-12 ">
+    <div className="h-14 w-full bg-gray-100 backdrop-blur-md backdrop-filter overflow-hidden flex items-center justify-between px-4 py-12 ">
       <div>
         <h3 className='font-cabin text-2xl text-start text-bold text-gray-500 items-center justify-center'>Bienvenue username </h3>
       </div>

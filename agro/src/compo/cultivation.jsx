@@ -53,7 +53,7 @@ const Cultivation = () => {
                   <th className="w-1/8 px-4 py-2 text-center">Production</th>
                   <th className="w-1/8 px-4 py-2 text-center">Recolte</th>
                   <th className="w-1/8 px-4 py-2 text-center">Planté</th>
-                  <th className="w-1/8 px-4 py-2 text-center">Produit(kg)</th>
+                  <th className="w-1/8 px-4 py-2 text-center text-[#6ea3d8]">Produit(kg)</th>
                   <th className="w-1/8 px-4 py-2 text-center">Surface</th>
                   <th className="w-1/8 px-4 py-2 text-center">Action</th>
                 </tr>

@@ -6,7 +6,7 @@ const searchagri = () => {
     return (
         <div>
             <div className="h-14 w-full  bg-gray-100 backdrop-blur-md backdrop-filter overflow-hidden flex items-center justify-between px-4 py-12 ">
-                <div>
+                <div className='w-full mx-5'>
                     <h3 className='font-cabin text-2xl text-start text-bold text-gray-500'>Bienvenue username </h3>
                 </div>
                 {/* <div className='absolute right-12'>

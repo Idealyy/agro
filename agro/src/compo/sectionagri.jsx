@@ -1,33 +1,59 @@
-import React from 'react'
-import Calendrier from './calendar'
-import EventForm from './eventForm'
+import React, { useEffect, useState } from 'react';
+import Calendrier from './calendar';
+import EventForm from './eventForm';
+import url from "./../api/api";
+import moment from "moment";
 
-const sectionagri = () => {
+const SectionAgri = () => {
+  const [dateSelected, setDateSelected] = useState(''); // Utilisation de dateSelected comme state pour la date sélectionnée
+  const [evenement, setEvenement] = useState([]);
+
+  useEffect(() => {
+    fetchEvent();
+  }, [dateSelected]);
+
+  const handleFilter = (data, selectedDate) => {
+    const filtered = data.filter(item => {
+      // Convertir la date de début en objet moment
+      const eventStartDate = moment(item.date_debut);
+  
+      // Comparer les dates en tenant compte du fuseau horaire
+      return eventStartDate.format('YYYY-MM-DD') === selectedDate;
+    });
+  
+    setEvenement(filtered);
+  };
+  
+
+  const fetchEvent = async () => {
+
+    try {
+      const response = await url.get("agriculture/calendrier/allCalendar");
+      const eventList = response.data;
+      const currentDate = dateSelected || new Date().toISOString().split('T')[0];
+
+      // Mettre à jour le filtre avec la date sélectionnée
+      handleFilter(eventList, currentDate);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
+
+  const getDateFunc = (selectedDate) => {
+    setDateSelected(selectedDate);
+  };
+
   return (
-    <div className="  w-1/4 p-4 mr-0 bg-gradient-to-t from-sky-200 to-[#6ea3d8]">
-    <div className=' absolute right-4'>
-    <button className="Btn">
-      <div className="sign">
-        <svg viewBox="0 0 512 512">
-          <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
-        </svg>
+    <div className="w-3/8 px-8 mt-0 mr-0 bg-gradient-to-t from-sky-200 to-[#6ea3d8]">
+      
+      <div className='mt-10'>
+        <Calendrier getDate={getDateFunc} />
       </div>
-      <div className="text text-lg">se⠀déconnecter</div>
-    </button>
-
+      <div className='mt-5 mx-2 w-64'>
+        <EventForm evenement={evenement} />
+      </div>
     </div>
-    <div className='mt-20 '>
-    <Calendrier/>
+  );
+};
 
-    </div>
-
-    <div className='mt-2 mx-2 w-64   '>
-    <EventForm/>
-
-    </div>
-    
-</div>
-  )
-}
-
-export default sectionagri
+export default SectionAgri;
