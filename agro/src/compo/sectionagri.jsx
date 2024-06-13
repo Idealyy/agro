@@ -3,6 +3,8 @@ import Calendrier from './calendar';
 import EventForm from './eventForm';
 import url from "./../api/api";
 import moment from "moment";
+import axios from 'axios';
+
 
 const SectionAgri = () => {
   const [dateSelected, setDateSelected] = useState(''); // Utilisation de dateSelected comme state pour la date sélectionnée
@@ -28,7 +30,7 @@ const SectionAgri = () => {
   const fetchEvent = async () => {
 
     try {
-      const response = await url.get("agriculture/calendrier/allCalendar");
+      const response = await axios.get("http://localhost/api/agriculture/calendrier/getAll");
       const eventList = response.data;
       const currentDate = dateSelected || new Date().toISOString().split('T')[0];
 

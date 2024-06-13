@@ -63,7 +63,7 @@ const animal = ({ takeAnimal }) => {
 
   const fetchAnimal = async () => {
     try {
-      const animals = await url.get('animals')
+      const animals = await axios.get('http://192.168.88.19:8080/api/elevage/animal/getAll')
       setAnimalList(animals.data);
       // console.log(animals.data);
     } catch (error) {
@@ -112,6 +112,7 @@ const animal = ({ takeAnimal }) => {
     try {
 
       const sendData = await axios.post('http://localhost:8080/api/elevage/animal/add', {
+      animalRequest:{
         nom: animalData.nom,
         espece: animalData.espece,
         race: animalData.race,
@@ -123,6 +124,8 @@ const animal = ({ takeAnimal }) => {
         age: animalData.age,
         poids: animalData.poids,
         statut: animalData.statut,
+      },
+      santeRequest:{
         vaccin: animalSante.vaccin,
         vermifuge: animalSante.vermifuge,
         date_vacc: animalSante.date_vacc,
@@ -131,8 +134,11 @@ const animal = ({ takeAnimal }) => {
         blessure: animalSante.blessure,
         traitement: animalSante.traitement,
         date_trait: animalSante.date_trait,
-        // etat: animalSante.etat,
+        etat: "",
         gestation: animalSante.gestation
+      }
+       
+        
       });
 
       console.log(sendData.data.animal_id);
@@ -179,350 +185,393 @@ const animal = ({ takeAnimal }) => {
   };
 
   return (
-    <div>
-      <div>
-        <div className="px-4 w-full">
-          <div className="flex max-w-full">
-            <h2 className="text-xl font-cabin text-gray-600 mb-2 w-5/6">Liste des animaux</h2>
-            <button onClick={togglePopup} className="bg-[#6ea3d8] text-white text-xs font-cabin px-4 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#6ea3d8] focus:outline-none">
-              AJOUTER
-            </button>
-          </div>
-          <div className='h-[30vh] overflow-y-scroll'>
-            <table className="table-fixed  w-full border-collapse bg-white rounded-lg text-gray-600">
-              <thead>
-                <tr>
-                  <th className="">Espece</th>
-                  <th className="">Profile</th>
-                  <th className="">Nom</th>
-                  <th className="">Âge</th>
-                  <th className="">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {animalList.map((item) => (
-                  <tr key={item.id_animal} className="border-b hover:bg-gray-100 text-center">
-                    <td className="w-1/4 px-4 py-2">{item.espece}</td>
-                    <td className="w-1/4 px-4 py-2">
-                      <div className='flex justify-center cursor-pointer hover:text-yellow-400 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110' onClick={() => takeAnimal(item)} >
-                        <MdOutlineEmojiEmotions />
-                      </div>
-                    </td>
-                    <td className="w-1/4 px-4 py-2 hover:"><Link to="/sante"><span>{item.nom}</span></Link></td>
-                    <td className="w-1/4 px-4 py-2">{item.sexe}</td>
-                    <td className="w-14 px-4 py-2">
-                      <div className="flex justify-center">
-                        <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">
-                          <MdOutlineModeEdit />
-                        </div>
-                        <div onClick={() => handleDelete(item.id_animal)} className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer'>
-                          <RiDeleteBinLine />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <div className='w-full'>
-            <h1>Suivi des espèces d'animaux</h1>
-            <form action="">
-              <div className="">
-                <select
-                  name="espece"
-                  value={animalData.espece}
-                  onChange={handleChange}
-                  autoComplete="species-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option>Bovin</option>
-                  <option>Porcin</option>
-                  <option>Volaille</option>
-                  <option>Caprin</option>
-                  <option>Ovin</option>
+    <div className="h-screen flex flex-col space-y-3">
 
-                </select>
-              </div>
-            </form>
-
-          </div>
-          <div className=''>
-            <Espece />
-          </div>
-        </div>
-      </div>
-      <div className="">
-      </div>
-      {showPopup && (
-        <div className="flex justify-center items-center min-h-screen bg-gray-200">
-          <button
-            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded"
-            onClick={togglePopup}
-          >
-            Open Popup
-          </button>
-          {showPopup && (
-            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-                <button
-                  className="text-gray-600 hover:text-gray-800 float-end mt-0"
-                  onClick={togglePopup}
-                >
-                  <IoClose />
+      <div className="w-full flex flex-col px-8 h-10 ">
+        {/* tableau */}
+        <div className=" font-cabin rounded-lg shadow-md h-40">
+          <div className="max-w-full bg-white overflow-hidden shadow-md rounded-lg">
+            <div className="px-4 py-4 w-full">
+              <div className="flex max-w-full mb-6">
+                <h2 className="text-xl font-cabin text-gray-600 mb-2 w-5/6">Liste des animaux</h2>
+                <button onClick={togglePopup} className="bg-[#6ea3d8] text-white text-xs font-cabin px-4 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#6ea3d8] focus:outline-none">
+                  AJOUTER
                 </button>
-                <form className="m-2" onSubmit={handleSubmit} >
-                  <div className=''>
-                    <Swiper
-                      modules={[Navigation, Pagination, Scrollbar, A11y]}
-                      spaceBetween={50}
-                      slidesPerView={1}
-                      navigation
-                      pagination={{ clickable: true }}
-                      // scrollbar={{ draggable: true }}
-                      onSwiper={(swiper) => console.log(swiper)}
-                      onSlideChange={() => console.log('slide change')}
-                    >
-                      <SwiperSlide>
-                        <div className=' w-max mx-auto mb-3'>
-                          <div className="sm:col-span-3 mb-0 w-56">
-                            <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                              Nom
-                            </label>
-                            <div className="">
-                              <input
-                                type="text"
-                                name="nom"
-                                value={animalData.nom}
-                                onChange={handleChange}
-                                autoComplete="given-name"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 mb-0 w-56 ">
-                            <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                              Race
-                            </label>
-                            <div className="">
-                              <input
-                                type="text"
-                                name="race"
-                                value={animalData.race}
-                                onChange={handleChange}
-                                autoComplete="family-name"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 w-56 mb-0 mt-2">
-                            <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
-                              Espèce
-                            </label>
-                            <div className="">
-                              <select
-                                name="espece"
-                                value={animalData.espece}
-                                onChange={handleChange}
-                                autoComplete="species-name"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                              >
-                                <option>Bovin</option>
-                                <option>Porcin</option>
-                                <option>Volaille</option>
-                                <option>Caprin</option>
-                                <option>Ovin</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 mt-2 mb-0 w-56">
-                            <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900">
-                              Date de Naissance
-                            </label>
-                            <div>
-                              <input
-                                type="date"
-                                name="datenaiss"
-                                value={animalData.datenaiss}
-                                onChange={handleChange}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              />
-                            </div>
-                          </div>
-                          <fieldset className="mt-3 w-56">
-                            <legend className="text-sm font-semibold leading-6 text-gray-900">Sexe</legend>
-                            <div className="flex space-x-3">
-                              <div className="flex items-center gap-x-3">
-                                <input
-                                  name="sexe"
-                                  value={"male"}
-                                  onChange={handleChange}
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
-                                  Mâle
-                                </label>
-                              </div>
-                              <div className="flex items-center gap-x-3 ">
-                                <input
-                                  name="sexe"
-                                  value={"Femelle"}
-                                  onChange={handleChange}
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                                <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
-                                  Femelle
-                                </label>
-                              </div>
-                            </div>
-                          </fieldset>
-                        </div>
-                      </SwiperSlide>
-                      <SwiperSlide>
-                        <div className=' w-max mx-auto'>
-                          <div className="sm:col-span-3 mb-0 w-56">
-                            <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                              Poids
-                            </label>
-                            <div>
-                              <input
-                                type="text"
-                                name="poids"
-                                value={animalData.poids}
-                                onChange={handleChange}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              />
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 mb-0 my-2 w-20 flex  ">
-                            <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900 mx-3">
-                              Vermifuge
-                            </label>
-                            <div className="">
-                              <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer"
-                                  name="vermifuge"
-                                  value={animalSante.vermifuge}
-                                  onChange={handleCheckboxChange}
-                                />
-                                <div class="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-12 h-6  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✕']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-5 after:w-5 after:top-0.5 after:left-0.5 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✓'] peer-hover:after:scale-85 peer-checked:after:rotate-0">
-                                </div>
-                              </label>
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 my-2 w-56 flex">
-                            <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900 mx-2">
-                              Vaccination
-                            </label>
-                            <div className="">
-                              <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer"
-                                  name="vaccin"
-                                  value={animalSante.vaccin}
-                                  onChange={handleCheckboxChange}
-                                />
-                                <div class="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-12 h-6  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✕']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-5 after:w-5 after:top-0.5 after:left-0.5 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✓'] peer-hover:after:scale-85 peer-checked:after:rotate-0">
-                                </div>
-                              </label>
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 mb-0 w-60 ">
-                            <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                              Etat
-                            </label>
-                            <div className="">
-                              <select
-                                name="etat"
-                                value={animalSante.traitement}
-                                onChange={handleChangeSante}
-                                autoComplete="species-name"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                              >
-                                <option value={true}>En bonne santé</option>
-                                <option value={false}>En traitement</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="flex space-x-1  ">
-                            <div className="sm:col-span-3 mb-0 w-28  ">
-                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Maladie
-                              </label>
-                              <div className="">
-                                <input
-                                  type="text"
-                                  name="maladie"
-                                  value={animalSante.maladie}
-                                  onChange={handleChangeSante}
-                                  autoComplete="family-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                              </div>
-                            </div>
-                            <div className="sm:col-span-3 mb-0 w-28  ">
-                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Blessure
-                              </label>
-                              <div className="">
-                                <input
-                                  type="text"
-                                  name="blessure"
-                                  value={animalSante.blessure}
-                                  onChange={handleChangeSante}
-                                  autoComplete="family-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="sm:col-span-3 w-56">
-                            <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
-                              Statut
-                            </label>
-                            <div className="mt-2">
-                              <select
-                                name="status"
-                                value={animalData.statut}
-                                onChange={handleChange}
-                                autoComplete="status-name"
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                              >
-                                <option>Acheté</option>
-                                <option>Acquis</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    </Swiper>
-                  </div>
-                  <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button
-                      type="button"
-                      className="text-sm font-semibold leading-6 text-gray-900"
-                      onClick={togglePopup}
-                    >
-                      ANNULER
-                    </button>
-                    <button
-                      type="submit"
 
-                      className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      AJOUTER
-                    </button>
-                  </div>
-                </form>
+              </div>
+              <div className='h-[30vh] overflow-y-scroll'>
+                <table className="table-fixed  w-full border-collapse bg-white rounded-lg text-gray-600">
+                  <thead>
+                    <tr>
+                      <th className="w-1/4 px-4 py-2 text-center">Espece</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Profile</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Nom</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Âge</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {animalList.map((item) => (
+                      <tr key={item.id_animal} className="border-b hover:bg-gray-100 text-center">
+                        <td className="w-1/4 px-4 py-2">{item.espece}</td>
+                        <td className="w-1/4 px-4 py-2">
+                          <div className='flex justify-center cursor-pointer hover:text-yellow-400 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110' onClick={() => takeAnimal(item)} >
+                            <MdOutlineEmojiEmotions />
+                          </div>
+                        </td>
+                        <td className="w-1/4 px-4 py-2 ho ver:"><Link to="/sante"><span>{item.nom}</span></Link></td>
+                        <td className="w-1/4 px-4 py-2">{item.sexe}</td>
+                        <td className="w-14 px-4 py-2">
+                          <div className="flex justify-center">
+                            <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">
+                              <MdOutlineModeEdit />
+                            </div>
+                            <div onClick={() => handleDelete(item.id_animal)} className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer'>
+                              <RiDeleteBinLine />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
-
-          )}
+          </div>
         </div>
-      )}
+
+        {showPopup && (
+          <div className="flex justify-center items-center min-h-screen bg-gray-200">
+            <button
+              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded"
+              onClick={togglePopup}
+            >
+              Open Popup
+            </button>
+            {showPopup && (
+              <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+                  <button
+                    className="text-gray-600 hover:text-gray-800 float-end mt-0"
+                    onClick={togglePopup}
+                  >
+                    <IoClose />
+                  </button>
+                  <form className="m-2" onSubmit={handleSubmit} >
+                    <div className=''>
+                      <Swiper
+                        modules={[Navigation, Pagination, Scrollbar, A11y]}
+                        spaceBetween={50}
+                        slidesPerView={1}
+                        navigation
+                        pagination={{ clickable: true }}
+                        // scrollbar={{ draggable: true }}
+                        onSwiper={(swiper) => console.log(swiper)}
+                        onSlideChange={() => console.log('slide change')}
+                      >
+                        <SwiperSlide>
+
+                          <div className=' w-max mx-auto mb-3'>
+                            <div className="sm:col-span-3 mb-0 w-56">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Nom
+                              </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="nom"
+                                  value={animalData.nom}
+                                  onChange={handleChange}
+                                  autoComplete="given-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
+                            </div>
+                            <div className="sm:col-span-3 mb-0 w-56 ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Race
+                              </label>
+                              <div className="">
+                                <input
+                                  type="text"
+                                  name="race"
+                                  value={animalData.race}
+                                  onChange={handleChange}
+                                  autoComplete="family-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+                                />
+                              </div>
+                            </div>
+
+                            <div className="sm:col-span-3 w-56 mb-0 mt-2">
+                              <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900">
+                                Espèce
+                              </label>
+                              <div className="">
+                                <select
+                                  name="espece"
+                                  value={animalData.espece}
+                                  onChange={handleChange}
+                                  autoComplete="species-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option>Bovin</option>
+                                  <option>Porcin</option>
+                                  <option>Volaille</option>
+                                  <option>Caprin</option>
+                                  <option>Ovin</option>
+
+                                </select>
+                              </div>
+                            </div>
+
+
+                            <div className="sm:col-span-3 mt-2 mb-0 w-56">
+                              <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900">
+                                Date de Naissance
+                              </label>
+                              <div>
+                                <input
+                                  type="date"
+                                  name="datenaiss"
+                                  value={animalData.datenaiss}
+                                  onChange={handleChange}
+
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
+                            </div>
+
+                            <fieldset className="mt-3 w-56">
+                              <legend className="text-sm font-semibold leading-6 text-gray-900">Sexe</legend>
+                              <div className="flex space-x-3">
+                                <div className="flex items-center gap-x-3">
+                                  <input
+                                    name="sexe"
+                                    value={"male"}
+                                    onChange={handleChange}
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  />
+                                  <label htmlFor="male" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Mâle
+                                  </label>
+                                </div>
+                                <div className="flex items-center gap-x-3 ">
+                                  <input
+                                    name="sexe"
+                                    value={"Femelle"}
+                                    onChange={handleChange}
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                  />
+                                  <label htmlFor="female" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Femelle
+                                  </label>
+                                </div>
+                              </div>
+                            </fieldset>
+
+
+                          </div>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                          <div className=' w-max mx-auto'>
+                            <div className="sm:col-span-3 mb-0 w-56">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Poids
+                              </label>
+                              <div>
+                                <input
+                                  type="text"
+                                  name="poids"
+                                  value={animalData.poids}
+                                  onChange={handleChange}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
+                            </div>
+
+
+
+                            <div className="sm:col-span-3 mb-0 my-2 w-20 flex  ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900 mx-3">
+                                Vermifuge
+                              </label>
+                              <div className="">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" class="sr-only peer"
+                                    name="vermifuge"
+                                    value={animalSante.vermifuge}
+                                    onChange={handleCheckboxChange}
+                                  />
+                                  <div class="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-12 h-6  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✕']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-5 after:w-5 after:top-0.5 after:left-0.5 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✓'] peer-hover:after:scale-85 peer-checked:after:rotate-0">
+                                  </div>
+                                </label>
+                              </div>
+                            </div>
+
+
+                            <div className="sm:col-span-3 my-2 w-56 flex">
+                              <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900 mx-2">
+                                Vaccination
+                              </label>
+                              <div className="">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" class="sr-only peer"
+                                    name="vaccin"
+                                    value={animalSante.vaccin}
+                                    onChange={handleCheckboxChange}
+                                  />
+                                  <div class="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-12 h-6  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✕']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-5 after:w-5 after:top-0.5 after:left-0.5 after:-rotate-180 after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✓'] peer-hover:after:scale-85 peer-checked:after:rotate-0">
+                                  </div>
+                                </label>
+                              </div>
+                            </div>
+
+                            <div className="sm:col-span-3 mb-0 w-60 ">
+                              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                Etat
+                              </label>
+                              <div className="">
+                                <select
+                                  name="etat"
+                                  value={animalSante.traitement}
+                                  onChange={handleChangeSante}
+                                  autoComplete="species-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option value={true}>En bonne santé</option>
+                                  <option value={false}>En traitement</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="flex space-x-1  ">
+                              <div className="sm:col-span-3 mb-0 w-28  ">
+                                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                  Maladie
+                                </label>
+                                <div className="">
+                                  <input
+                                    type="text"
+                                    name="maladie"
+                                    value={animalSante.maladie}
+                                    onChange={handleChangeSante}
+                                    autoComplete="family-name"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+                                  />
+                                </div>
+                              </div>
+                              <div className="sm:col-span-3 mb-0 w-28  ">
+                                <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                                  Blessure
+                                </label>
+                                <div className="">
+                                  <input
+                                    type="text"
+                                    name="blessure"
+                                    value={animalSante.blessure}
+                                    onChange={handleChangeSante}
+                                    autoComplete="family-name"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div className="sm:col-span-3 w-56">
+                              <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
+                                Statut
+                              </label>
+                              <div className="mt-2">
+                                <select
+                                  name="status"
+                                  value={animalData.statut}
+                                  onChange={handleChange}
+                                  autoComplete="status-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option>Acheté</option>
+                                  <option>Acquis</option>
+                                </select>
+                              </div>
+                            </div>
+
+                          </div>
+                        </SwiperSlide>
+                        ⠀⠀⠀⠀⠀⠀⠀
+                        ⠀⠀⠀⠀⠀⠀⠀
+
+                      </Swiper>
+
+
+
+                    </div>
+                    <div className="mt-6 flex items-center justify-end gap-x-6">
+                      <button
+                        type="button"
+                        className="text-sm font-semibold leading-6 text-gray-900"
+                        onClick={togglePopup}
+                      >
+                        ANNULER
+                      </button>
+                      <button
+                        type="submit"
+
+                        className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      >
+                        AJOUTER
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            )}
+          </div>
+        )}
+
+        {/* //diagrame */}
+
+      </div>
+      <div className=" p-8">
+
+        <div className=" mt-52 flex ">
+        <div>
+        <h1>Suivi des espèces d'animaux</h1>
+        //eto ny user mampiditra ny
+        <form action="">
+        <div className="">
+                                <select
+                                  name="espece"
+                                  value={animalData.espece}
+                                  onChange={handleChange}
+                                  autoComplete="species-name"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                                >
+                                  <option>Bovin</option>
+                                  <option>Porcin</option>
+                                  <option>Volaille</option>
+                                  <option>Caprin</option>
+                                  <option>Ovin</option>
+
+                                </select>
+                              </div>
+        </form>
+        
+        </div>
+      <div className='w-72'>
+      <Espece data={speciesData} />
+      
+      </div>
+        </div>
+      </div>
+
+
     </div>
   )
 }

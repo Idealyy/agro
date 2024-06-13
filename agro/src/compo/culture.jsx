@@ -11,8 +11,12 @@ const Culture = () => {
   const [dataParcelle, setDataParcelle] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [montrePopup, setMontrePopup] = useState(false);
-  const [submitData, setSubmitData] = useState({});
-  const [donne, setDonne] = useState([]); // Ajoutez cette ligne pour initialiser `donne`
+  const [submitData, setSubmitData] = useState({
+    type_plante: '',
+    variete: '',
+    description: '',
+    nbr_plante: ''
+  });
 
   useEffect(() => {
     fetchDataCulture();
@@ -20,7 +24,7 @@ const Culture = () => {
   }, []);
 
   const fetchDataCulture = () => {
-    axios.get('http://127.0.0.1:8080/api/agriculture/parcelle/getAll')
+    axios.get('http://localhost:8080/api/agriculture/plante/getAllP')
       .then(response => {
         setDataCulture(response.data);
         console.log(response.data);
@@ -31,9 +35,9 @@ const Culture = () => {
   };
 
   const fetchDataParcelle = () => {
-    axios.get('http://127.0.0.1:8080/api/agriculture/parcelle/getAll')
+    axios.get('http://localhost:8080/api/agriculture/parcelle/getAll')
       .then(response => {
-        setDonne(response.data); // Assurez-vous que `donne` est mis à jour avec les données
+        setDataParcelle(response.data);
         console.log(response.data);
       })
       .catch(error => {
@@ -61,14 +65,19 @@ const Culture = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const submit = await axios.post('/api/', {
-        "type_plante": "Lait",
-        "quantite": "4.10",
-        "qualite": "1",
-        "date_prod": "2024-06-09"
-        // "especef":"bovin"
+      const submit = await axios.post('http://localhost:8080/api/agriculture/plante/addPlante', {
+        type: submitData.type,
+        variete: submitData.variete,
+        description: submitData.description,
+        nombre: submitData.nombre
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
       console.log(submit);
+      fetchDataCulture();  // Refresh the data after submission
+      togglePopup();  // Close the popup after submission
     } catch (error) {
       console.error(error);
     }
@@ -220,10 +229,10 @@ const Culture = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {donne.map((item) => (
+                  {dataParcelle.map((item) => (
                     <tr key={item.id} className="border-b hover:bg-gray-100 text-center">
-                      <td className="w-1/4 px-4 py-2">{item.code}</td>
-                      <td className="w-1/4 px-4 py-2">{item.superficie}</td>
+                      <td className="w-1/4 px-4 py-2">{item.code_parcelle}</td>
+                      <td className="w-1/4 px-4 py-2">{item.surface}</td>
                       <td className="w-14 px-4 py-2">
                         <div className="flex justify-center">
                           <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 cursor-pointer">

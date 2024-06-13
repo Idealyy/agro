@@ -1,219 +1,168 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
-import { MdOutlineModeEdit } from "react-icons/md";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { IoClose } from "react-icons/io5";
-import api from '../api/api'
-
-
-const data = [
-    { name: 'Lait', espece: 'bovin', age: 5, q: 'bon' },
-    { name: 'fromage', espece: 'bovin', age: 25, q: 'bon' },
-    { name: ' œufs', espece: 'volaille', age: 40, q: 'bon' },
-];
+import React, { useState, useEffect } from 'react';
+import { MdOutlineModeEdit } from 'react-icons/md';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import DiagKPI from './diagKPI';  // Assurez-vous que le chemin est correct
 
 const Production = () => {
-    const [showPopup, setShowPopup] = useState(false);
-    const [data, setData] = useState([]);
-    const [submitData, setSubmitData] = useState([
-        {
-            type: '',
-            espece: '',
-            quantite: '',
-            qualite: '',
-        },
-    ]);
+    const [type_produit, setType_produit] = useState('');
+    const [especef, setEspecef] = useState('');
+    const [mois, setMois] = useState('');
+    const [id_produit, setId_produit] = useState('');
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [diagProps, setDiagProps] = useState(null);
 
-    const togglePopup = () => {
-        setShowPopup(!showPopup);
+    useEffect(() => {
+        const fetchProductsFromApi = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/elevage/produit/getAll');
+                const data = await response.json();
+                setProducts(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des produits :', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProductsFromApi();
+    }, []);
+
+    const fetchIdProduit = () => {
+        const productNameLowerCase = type_produit.trim().toLowerCase();
+        const foundProduct = products.find(product => product.type_produit.trim().toLowerCase() === productNameLowerCase);
+        if (foundProduct) {
+            setId_produit(foundProduct.id_produit);
+            return foundProduct.id_produit;
+        } else {
+            setId_produit('');
+            return '';
+        }
     };
 
-    const handleChange = (e) => {
-        setSubmitData({
-            ...submitData,
-            [e.target.name]: e.target.value
-          });
-
-          console.log(submitData);
-
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-
-            const submit = await api.post('/api/elevage/produit/addProduit',
-                {
-                    "type_produit":"Lait",
-                    "quantite":"4.10",
-                    "qualite":"1",
-                    "date_prod":"2024-06-09"
-                    // "especef":"bovin"
-                }
-            )
-            console.log(submit);
-
-        } catch (error) {
-            console.error(error);
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === 'type_produit') {
+            setType_produit(value);
+        } else if (name === 'especef') {
+            setEspecef(value);
+        } else if (name === 'mois') {
+            setMois(value);
         }
-    }
+    };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const id = fetchIdProduit();
+        if (id) {
+            setDiagProps({
+                id_produit: id,
+                espece_fournisseur: especef,
+                type_produit,
+                mois
+            });
+        } else {
+            console.error('Produit introuvable');
+        }
+    };
 
     return (
-        <div className="inline h-screen">
-            <div className="overflow-x-auto rounded-lg shadow-md mx-4 transform translate-y-5 mb-4 ">
-                <div className="max-w-full bg-white overflow-hidden shadow-md rounded-lg">
-                    <div className="px-4 py-4 w-full">
-                        <div className="flex max-w-full mb-6">
-                            <h2 className="text-xl font-cabin text-gray-600 mb-2 w-5/6">Liste des produits</h2>
-                            <button onClick={togglePopup} className="bg-[#6ea3d8] text-white text-xs font-cabin px-2 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#6ea3d8] focus:outline-none">
-                                AJOUTER
-                            </button>
-
-                            <div className="flex justify-center items-center">
-
-
-                            </div>
-                        </div>
-
-
-                        <table className="table-fixed w-full border-collapse bg-white rounded-lg text-gray-600 font-cabin">
-                            <thead>
+        <div className='h-screen flex flex-col margin-8'>
+            <div>
+                <h1 className='text-xl font-cabin text-gray-600 mb-2 w-5/6'>
+                    Liste des produits par espèce
+                </h1>
+                <div className="h-[250px] overflow-y-scroll p-8">
+                    <table className="table-fixed overflow-x-auto w-full border-collapse bg-white rounded-lg text-gray-600 font-cabin h-56 overflow-scroll">
+                        <thead>
+                            <tr>
+                                <th className="w-1/4 px-4 py-2 text-center">Produit</th>
+                                <th className="w-1/4 px-4 py-2 text-center">Espèce</th>
+                                <th className="w-1/4 px-4 py-2 text-center">Quantité</th>
+                                <th className="w-1/4 px-4 py-2 text-center">Qualité</th>
+                                <th className="w-1/4 px-4 py-2 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading ? (
                                 <tr>
-                                    <th className="w-1/4 px-4 py-2 text-center">Produit</th>
-                                    <th className="w-1/4 px-4 py-2 text-center">Espèce</th>
-                                    <th className="w-1/4 px-4 py-2 text-center">Quantité</th>
-                                    <th className="w-1/4 px-4 py-2 text-center">Qualité</th>
-                                    <th className="w-1/4 px-4 py-2 text-center">Action</th>
-
+                                    <td colSpan="5" className="text-center py-4">Chargement en cours...</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {data.map((item) => (
-                                    <tr key={item.id} className="border-b hover:bg-gray-100 text-center">
-                                        <td className="w-1/4 px-4 py-2">{item.name}</td>
-                                        <td className="w-1/4 px-4 py-2"><span>{item.espece}</span></td>
-                                        <td className="w-1/4 px-4 py-2">{item.age}</td>
-                                        <td className="w-1/4 px-4 py-2">{item.q}</td>
-                                        <td className="w-14 px-4 py-2">
-                                            <div className="flex justify-center">
-                                                <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 ">
-                                                    <MdOutlineModeEdit />
-                                                </div>
-                                                <div className='hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 '>
-                                                    <RiDeleteBinLine />
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            ) : (
+                                products.map((item, index) => (
+                                    <TableRow key={index} item={item} />
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            {showPopup && (
-                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-                        <button
-                            className="text-gray-600 hover:text-gray-800 float-right mt-0"
-                            onClick={togglePopup}
-                        >
-                            <IoClose />
-
+            <div className='flex '>
+                <div className="m-5 h-24">
+                    <form onSubmit={handleSubmit} className=" mx-auto bg-white p-4 rounded-lg shadow-md">
+                        <div className="mb-4">
+                            <label htmlFor="type_produit" className="block text-gray-700 font-bold mb-1">Entrez le nom du produit :</label>
+                            <input
+                                type="text"
+                                id="type_produit"
+                                name="type_produit"
+                                value={type_produit}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="especef" className="block text-gray-700 font-bold mb-1">Entrez l'espèce fournisseur :</label>
+                            <input
+                                type="text"
+                                id="especef"
+                                name="especef"
+                                value={especef}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="mois" className="block text-gray-700 font-bold mb-1">Entrez le mois :</label>
+                            <input
+                                type="text"
+                                id="mois"
+                                name="mois"
+                                value={mois}
+                                onChange={handleInputChange}
+                                className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
+                            />
+                        </div>
+                        <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            afficher diagramme
                         </button>
-                        <div className="">
-                            <form className='m-2'>
-                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
-                                    Type de produit
-                                </label>
-                                <input
-                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                                    type="text"
-                                    name="type"
-                                // value={submitData.type} 
-                                onChange={handleChange} 
-                                />
-                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
-                                    Espèce fournisseur
-                                </label>
-                                <input
-                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                                    type="text"
-                                    name="espece"
-                                // value={formData.brand} 
-                                onChange={handleChange} 
-                                />
-                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
-                                    Quantité
-                                </label>
-                                <input
-                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                                    type="text"
-                                    name="quantite"
-                                // value={formData.brand} 
-                                onChange={handleChange} 
-                                />
-                                <label htmlFor="" className='block text-sm font-medium leading-6 text-gray-900'>
-                                    Qualité
-                                </label>
-                                <input
-                                    className="block w-full p-2 my-2 rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                                    type="text"
-                                    name="qualite"
-                                // value={formData.brand} 
-                                onChange={handleChange} 
-                                />
-
-                                <div className="mt-6 flex items-center justify-end gap-x-6">
-                                    <button
-                                        type="button"
-                                        className="text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-200 hover:rounded-full  px-3 py-2"
-                                        onClick={togglePopup}
-                                    >
-                                        ANNULER
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        onClick={handleSubmit}
-                                        className="rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                    >
-                                        AJOUTER
-                                    </button>
-                                </div>
-                                {/* <button 
-              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 mt-3 rounded w-full" 
-              type="submit"
-            > */}
-                                {/* {editId ? 'Update' : 'Add'} */}
-                                {/* Submit
-            </button> */}
-                            </form>
-                        </div>
-                    </div>
-
+                    </form>
                 </div>
-            )}
 
-            <div className=" w-full p-8 h-screen">
-                <div className="flex mb-8">
-                    <div className="bg-[#FFF6A7] w-1/2 rounded-lg shadow-md mr-4 hover:scale-105 transition duration-300 ease-out">
-                        <div className="p-4">
-                            <h2 className="text-xl font-cabin mb-2">Diagramme 1</h2>
-                            <p className="text-gray-700 font-cabin">Contenu de la diagrame 1 ici...</p>
-                        </div>
-                    </div>
-                    <div className="bg-[#AFDED3] w-1/2 rounded-lg shadow-md hover:scale-105 transition duration-300 ease-out">
-                        <div className="p-4">
-                            <h2 className="text-xl font-cabin mb-2">Diagrame 2</h2>
-                            <p className="text-gray-700 font-cabin">Contenu de la diagrame 2 ici...</p>
-                        </div>
-                    </div>
+                {/* Afficher DiagKPI si diagProps est défini */}
+                {diagProps && <DiagKPI {...diagProps} />}
+            </div>
+        </div>
+    );
+};
+
+const TableRow = ({ item }) => (
+    <tr className="border-b hover:bg-gray-100 text-center">
+        <td className="w-1/4 px-4 py-2">{item.type_produit}</td>
+        <td className="w-1/4 px-4 py-2">{item.especef}</td>
+        <td className="w-1/4 px-4 py-2">{item.quantite}</td>
+        <td className="w-1/4 px-4 py-2">{item.qualite}</td>
+        <td className="w-1/4 px-4 py-2">
+            <div className="flex justify-center">
+                <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 ">
+                    <MdOutlineModeEdit />
+                </div>
+                <div className="hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 ">
+                    <RiDeleteBinLine />
                 </div>
             </div>
+        </td>
+    </tr>
+);
 
-        </div>
-    )
-}
-
-export default Production
+export default Production;
