@@ -1,9 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
+
 
 const connect = () => {
   return (
     <div>
-      <div className="bg-white p-8 rounded shadow-md max-w-sm w-full">
+      <div className="p-8 m-auto mt-32 max-w-sm w-full">
                 <h1 className="text-2xl font-semibold mb-4 text-center">Se Connecter</h1>
                 <form>
                     <div className="mb-4">

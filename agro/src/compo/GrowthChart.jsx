@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const GrowthChar = ({ data }) => {
+const GrowthChart = ({ data = [] }) => {
   const chartData = {
     labels: data.map(item => item.age),
     datasets: [
@@ -49,4 +49,4 @@ const GrowthChar = ({ data }) => {
   return <Bar data={chartData} options={options} />;
 };
 
-export default GrowthChar;
+export default GrowthChart;

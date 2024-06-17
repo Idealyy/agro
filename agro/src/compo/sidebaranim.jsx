@@ -24,6 +24,11 @@ import { LuWheat } from "react-icons/lu";
 
 
 const Sidebaranim = ({ data, test }) => {
+  const handleAddData = (data) => {
+    // Traitement des données, par exemple :
+    console.log('Données reçues :', data);
+    // Autres actions nécessaires, comme la mise à jour de l'état ou l'affichage de messages à l'utilisateur
+  };
 
   const [isOpen, setIsOpen] = useState(true);
 
@@ -151,7 +156,7 @@ const Sidebaranim = ({ data, test }) => {
           {data === 'production' && <Production />}
           {data === 'animal' && <Animal takeAnimal={takeAnimal} />}
           {data === 'sante' && <Sante />}
-          {data === 'croissance' && <Croissance />}
+          {data === 'croissance' && <Croissance  onAddData={handleAddData} />}
           {data === 'profil' && <Profil item={animal} />}
 
         </div>

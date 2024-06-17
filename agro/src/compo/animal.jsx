@@ -63,9 +63,9 @@ const animal = ({ takeAnimal }) => {
 
   const fetchAnimal = async () => {
     try {
-      const animals = await axios.get('http://192.168.88.19:8080/api/elevage/animal/getAll')
+      const animals = await axios.get('http://localhost/api/elevage/animal/getAll')
       setAnimalList(animals.data);
-      // console.log(animals.data);
+      // console.log(animals.data); 
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './compo/home'
+import Connect from './compo/connect'
+
 import Sidebaranim from './compo/sidebaranim'
 import Animal from './compo/animal'
 import Production from './compo/production'
@@ -24,6 +26,7 @@ function App() {
         
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/connect" element={<Connect />} />
         <Route path="/sidebaranim" element={<Sidebaranim />} />
         <Route path="/animal" element={<Sidebaranim data={"animal"} />} />
         <Route path="/croissance" element={<Sidebaranim data={"croissance"} />} />
@@ -36,6 +39,7 @@ function App() {
         <Route path="/meteo" element={<Sidebaragri data={"meteo"} />} />
         <Route path="/cultivation" element={<Sidebaragri data={"cultivation"} />} />
         <Route path="/phase" element={ <Sidebaranim data={"phase"} /> }/>
+        
 
 
 

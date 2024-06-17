@@ -66,6 +66,31 @@ const Production = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/elevage/produit/delete/
+
+`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                setProducts(products.filter(product => product.id_produit !== id));
+            } else {
+                console.error('Failed to delete the product');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du produit :', error);
+        }
+    };
+
+    const handleUpdate = (product) => {
+        setType_produit(product.type_produit);
+        setEspecef(product.especef);
+        setMois(product.mois);
+        setId_produit(product.id_produit);
+        // Set additional state or handle logic for the update if necessary
+    };
+
     return (
         <div className='h-screen flex flex-col margin-8'>
             <div>
@@ -90,7 +115,7 @@ const Production = () => {
                                 </tr>
                             ) : (
                                 products.map((item, index) => (
-                                    <TableRow key={index} item={item} />
+                                    <TableRow key={index} item={item} onDelete={handleDelete} onUpdate={handleUpdate} />
                                 ))
                             )}
                         </tbody>
@@ -139,14 +164,16 @@ const Production = () => {
                     </form>
                 </div>
 
+                <div>
                 {/* Afficher DiagKPI si diagProps est défini */}
                 {diagProps && <DiagKPI {...diagProps} />}
+                </div>
             </div>
         </div>
     );
 };
 
-const TableRow = ({ item }) => (
+const TableRow = ({ item, onDelete, onUpdate }) => (
     <tr className="border-b hover:bg-gray-100 text-center">
         <td className="w-1/4 px-4 py-2">{item.type_produit}</td>
         <td className="w-1/4 px-4 py-2">{item.especef}</td>
@@ -154,10 +181,10 @@ const TableRow = ({ item }) => (
         <td className="w-1/4 px-4 py-2">{item.qualite}</td>
         <td className="w-1/4 px-4 py-2">
             <div className="flex justify-center">
-                <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 ">
+                <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 hover:cursor-pointer" onClick={() => onUpdate(item)}>
                     <MdOutlineModeEdit />
                 </div>
-                <div className="hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 ">
+                <div className="hover:text-red-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 hover:cursor-pointer" onClick={() => onDelete(item.id_produit)}>
                     <RiDeleteBinLine />
                 </div>
             </div>

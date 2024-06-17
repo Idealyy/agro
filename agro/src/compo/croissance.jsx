@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import GrowthChart from './GrowthChar'; // Correction du nom du composant importé
+import GrowthChart from './GrowthChart'; // Correction du nom du composant importé
 
 const Croissance = ({ onAddData }) => {
   const [name, setName] = useState('');
   const [entries, setEntries] = useState([{ age: '', weight: '' }]);
-  const [data, setData] = useState(null); // Initialisation de l'état `data`
+  const [data, setData] = useState([]); // Initialisation de l'état `data` comme tableau vide
 
   const handleAddEntry = () => {
     setEntries([...entries, { age: '', weight: '' }]);
@@ -121,7 +121,7 @@ const Croissance = ({ onAddData }) => {
         </form>
       </div>
       <div className="w-full mt-8">
-        {data && <GrowthChart data={data} />} {/* Vérification si `data` existe avant de rendre le composant */}
+        {data.length > 0 && <GrowthChart data={data} />} {/* Vérification si `data` est un tableau non vide avant de rendre le composant */}
       </div>
     </div>
   );

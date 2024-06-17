@@ -16,8 +16,10 @@ const login = () => {
           <h3 className="intro-title text-3xl font-bold text-center text-white">
           "Optimisez votre exploitation agricole avec simplicité et efficacité <br />
            grâce à notre application de gestion de production agricole." <br /> <br />
-           <button className='bg-[#6ea3d8] text-white text-lg font-cabin px-2 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110'>commencer</button>
-            
+           <Link to='/connect' >
+           <button className='bg-[#6ea3d8] text-white text-lg font-cabin px-2 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110'>
+           commencer</button>
+           </Link>
 
           </h3>
         </div>
