@@ -1,19 +1,19 @@
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const GrowthChart = ({ data = [] }) => {
-  const chartData = {
-    labels: data.map(item => item.age),
+const GrowthChart = ({ growthData, animalName }) => {
+  const data = {
+    labels: growthData.map(dataPoint => `${dataPoint.age} mois`),
     datasets: [
       {
         label: 'Poids (kg)',
-        data: data.map(item => item.weight),
-        backgroundColor: '#6B7280',
-        borderColor: '#AFDED3',
-        borderWidth: 1,
+        data: growthData.map(dataPoint => dataPoint.weight),
+        fill: false,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.1,
       },
     ],
   };
@@ -22,11 +22,11 @@ const GrowthChart = ({ data = [] }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'bottom',
+        position: 'top',
       },
       title: {
         display: true,
-        text: 'Croissance de l\'animal',
+        text: `Courbe de croissance de ${animalName}`,
       },
     },
     scales: {
@@ -41,12 +41,16 @@ const GrowthChart = ({ data = [] }) => {
           display: true,
           text: 'Poids (kg)',
         },
-        beginAtZero: true,
       },
     },
   };
 
-  return <Bar data={chartData} options={options} />;
+  return (
+    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <h2>Courbe de croissance de l'animal</h2>
+      <Line data={data} options={options} />
+    </div>
+  );
 };
 
 export default GrowthChart;

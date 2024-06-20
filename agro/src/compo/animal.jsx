@@ -5,8 +5,9 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoClose, IoLogIn } from "react-icons/io5";
 import url from "./../api/api"
-import axios from 'axios';
+// import axios from 'axios';
 import Espece from './espece'
+import Swal from 'sweetalert2'
 
 
 // import Swiper core and required modules
@@ -51,7 +52,7 @@ const animal = ({ takeAnimal }) => {
     blessure: "",
     date_trait: "",
     traitement: "",
-    // etat: true,
+    etat: "",
     gestation: ""
   })
 
@@ -63,9 +64,9 @@ const animal = ({ takeAnimal }) => {
 
   const fetchAnimal = async () => {
     try {
-      const animals = await axios.get('http://localhost/api/elevage/animal/getAll')
+      const animals = await url.get('animals')
       setAnimalList(animals.data);
-      // console.log(animals.data); 
+      console.log(animals.data);
     } catch (error) {
       console.log(error);
     }
@@ -106,64 +107,72 @@ const animal = ({ takeAnimal }) => {
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, '0');
       const dd = String(today.getDate()).padStart(2, '0');
-      return `${dd}-${mm}-${yyyy}`;
+      return `${yyyy}-${mm}-${dd}`;
     };
 
     try {
 
-      const sendData = await axios.post('http://localhost:8080/api/elevage/animal/add', {
-      animalRequest:{
+
+      console.log(
+        {
+          nom: animalData.nom,
+          espece: animalData.espece,
+          race: animalData.race,
+          sexe: animalData.sexe,
+          date_naiss: animalData.datenaiss,
+          date_enregist: getTodayDate(),
+          date_vente: animalData.date_vente,
+          date_dece: animalData.date_dece,
+          age: animalData.age,
+          poids: animalData.poids,
+          status: animalData.statut,
+          vaccin: animalSante.vaccin,
+          vermifuge: animalSante.vermifuge,
+          date_vacc: animalSante.date_vacc,
+          date_verm: animalSante.date_verm,
+          maladie: animalSante.maladie,
+          blessure: animalSante.blessure,
+          traitement: animalSante.traitement,
+          date_trait: animalSante.date_trait,
+          etat: animalSante.etat,
+          gestation: animalSante.gestation
+        }
+      );
+
+      const sendData = await url.post('addAnimal', {
         nom: animalData.nom,
         espece: animalData.espece,
         race: animalData.race,
         sexe: animalData.sexe,
-        datenaiss: animalData.datenaiss,
-        date_enre: getTodayDate(),
-        date_vente: animalData.date_vente,
-        date_dece: animalData.date_dece,
+        date_naiss: animalData.datenaiss,
+        date_enregist: getTodayDate(),
+        date_vente: animalData.date_vente || null,
+        date_dece: animalData.date_dece || null,
         age: animalData.age,
         poids: animalData.poids,
-        statut: animalData.statut,
-      },
-      santeRequest:{
-        vaccin: animalSante.vaccin,
+        status: animalData.statut,
+        vaccin: animalSante.vaccin ? "Oui" : "Non",
         vermifuge: animalSante.vermifuge,
-        date_vacc: animalSante.date_vacc,
-        date_verm: animalSante.date_verm,
-        maladie: animalSante.maladie,
-        blessure: animalSante.blessure,
-        traitement: animalSante.traitement,
-        date_trait: animalSante.date_trait,
-        etat: "",
+        date_vacc: animalSante.date_vacc || null,
+        date_verm: animalSante.date_verm || null,
+        maladie: animalSante.maladie || "Aucune",
+        blessure: animalSante.blessure || "Aucune",
+        traitement: animalSante.traitement || "",
+        date_trait: animalSante.date_trait || null,
+        etat: animalSante.etat,
         gestation: animalSante.gestation
-      }
-       
-        
       });
+    fetchAnimal();
+      
+      togglePopup();
+      Swal.fire({
+        title: 'ajout effectué',
 
-      console.log(sendData.data.animal_id);
+        confirmButtonText: 'ok'
+      })
+      console.log(sendData.data);
 
-      // setAnimalSante(prevState => ({
-      //   ...prevState,
-      //   id_animal: sendData.data.animal_id
-      // }));
 
-      // const animalSanteJson = JSON.stringify(animalSante);
-      // console.log(animalSanteJson);
-
-      // const sendSante = await axios.post("animalSante", {
-      //   id_animal: sendData.data.animal_id,
-      //   vaccin: animalSante.vaccin,
-      //   vermifuge: animalSante.vermifuge,
-      //   date_vacc: animalSante.date_vacc,
-      //   date_verm: animalSante.date_verm,
-      //   maladie: animalSante.maladie,
-      //   blessure: animalSante.blessure,
-      //   date_trait: animalSante.date_trait,
-      //   etat: animalSante.etat,
-      //   gestation: animalSante.gestation
-
-      // });
 
     } catch (error) {
       console.log(error);
@@ -179,13 +188,18 @@ const animal = ({ takeAnimal }) => {
       console.error(error);
     }
   };
+  
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-CA'); // Adjust locale as per your requirement
+  };
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
   return (
-    <div className="h-screen flex flex-col space-y-3">
+    <div className="h-screen relative ">
 
       <div className="w-full flex flex-col px-8 h-10 ">
         {/* tableau */}
@@ -199,27 +213,28 @@ const animal = ({ takeAnimal }) => {
                 </button>
 
               </div>
-              <div className='h-[30vh] overflow-y-scroll'>
+              <div className='h-[30vh] overflow-y-scroll '>
                 <table className="table-fixed  w-full border-collapse bg-white rounded-lg text-gray-600">
                   <thead>
                     <tr>
-                      <th className="w-1/4 px-4 py-2 text-center">Espece</th>
-                      <th className="w-1/4 px-4 py-2 text-center">Profile</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Id </th>
                       <th className="w-1/4 px-4 py-2 text-center">Nom</th>
-                      <th className="w-1/4 px-4 py-2 text-center">Âge</th>
+
+                      <th className="w-1/4 px-4 py-2 text-center">Espece</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Date de naissance</th>
+                      <th className="w-1/4 px-4 py-2 text-center">Sexe</th>
                       <th className="w-1/4 px-4 py-2 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {animalList.map((item) => (
-                      <tr key={item.id_animal} className="border-b hover:bg-gray-100 text-center">
-                        <td className="w-1/4 px-4 py-2">{item.espece}</td>
+                    {animalList.map((item, index) => (
+                      <tr key={index} className="border-b hover:bg-gray-100 text-center">
+                        <td className="w-1/4 px-4 py-2">{item.id_animal}</td>
+                        <td className="w-1/4 px-4 py-2">{item.nom}</td>
                         <td className="w-1/4 px-4 py-2">
-                          <div className='flex justify-center cursor-pointer hover:text-yellow-400 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110' onClick={() => takeAnimal(item)} >
-                            <MdOutlineEmojiEmotions />
-                          </div>
+                          {item.espece}
                         </td>
-                        <td className="w-1/4 px-4 py-2 ho ver:"><Link to="/sante"><span>{item.nom}</span></Link></td>
+                        <td className="w-1/4 px-4 py-2 ho ver:"><Link to="/sante"><span>{formatDate(item.date_naiss)}</span></Link></td>
                         <td className="w-1/4 px-4 py-2">{item.sexe}</td>
                         <td className="w-14 px-4 py-2">
                           <div className="flex justify-center">
@@ -242,14 +257,9 @@ const animal = ({ takeAnimal }) => {
 
         {showPopup && (
           <div className="flex justify-center items-center min-h-screen bg-gray-200">
-            <button
-              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded"
-              onClick={togglePopup}
-            >
-              Open Popup
-            </button>
+
             {showPopup && (
-              <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+              <div className="fixed z-20 inset-0 flex justify-center items-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
                   <button
                     className="text-gray-600 hover:text-gray-800 float-end mt-0"
@@ -270,8 +280,7 @@ const animal = ({ takeAnimal }) => {
                         onSlideChange={() => console.log('slide change')}
                       >
                         <SwiperSlide>
-
-                          <div className=' w-max mx-auto mb-3'>
+                          <div className='w-max mx-auto my-10'>
                             <div className="sm:col-span-3 mb-0 w-56">
                               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
                                 Nom
@@ -321,12 +330,9 @@ const animal = ({ takeAnimal }) => {
                                   <option>Volaille</option>
                                   <option>Caprin</option>
                                   <option>Ovin</option>
-
                                 </select>
                               </div>
                             </div>
-
-
                             <div className="sm:col-span-3 mt-2 mb-0 w-56">
                               <label htmlFor="date" className="block text-sm font-medium leading-6 text-gray-900">
                                 Date de Naissance
@@ -337,12 +343,10 @@ const animal = ({ takeAnimal }) => {
                                   name="datenaiss"
                                   value={animalData.datenaiss}
                                   onChange={handleChange}
-
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                               </div>
                             </div>
-
                             <fieldset className="mt-3 w-56">
                               <legend className="text-sm font-semibold leading-6 text-gray-900">Sexe</legend>
                               <div className="flex space-x-3">
@@ -372,8 +376,6 @@ const animal = ({ takeAnimal }) => {
                                 </div>
                               </div>
                             </fieldset>
-
-
                           </div>
                         </SwiperSlide>
                         <SwiperSlide>
@@ -393,8 +395,6 @@ const animal = ({ takeAnimal }) => {
                               </div>
                             </div>
 
-
-
                             <div className="sm:col-span-3 mb-0 my-2 w-20 flex  ">
                               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900 mx-3">
                                 Vermifuge
@@ -411,7 +411,6 @@ const animal = ({ takeAnimal }) => {
                                 </label>
                               </div>
                             </div>
-
 
                             <div className="sm:col-span-3 my-2 w-56 flex">
                               <label htmlFor="species" className="block text-sm font-medium leading-6 text-gray-900 mx-2">
@@ -437,13 +436,12 @@ const animal = ({ takeAnimal }) => {
                               <div className="">
                                 <select
                                   name="etat"
-                                  value={animalSante.traitement}
                                   onChange={handleChangeSante}
                                   autoComplete="species-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
-                                  <option value={true}>En bonne santé</option>
-                                  <option value={false}>En traitement</option>
+                                  <option value={1}>En bonne santé</option>
+                                  <option >En traitement</option>
                                 </select>
                               </div>
                             </div>
@@ -476,13 +474,10 @@ const animal = ({ takeAnimal }) => {
                                     onChange={handleChangeSante}
                                     autoComplete="family-name"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
                                   />
                                 </div>
                               </div>
                             </div>
-
-
                             <div className="sm:col-span-3 w-56">
                               <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
                                 Statut
@@ -490,26 +485,18 @@ const animal = ({ takeAnimal }) => {
                               <div className="mt-2">
                                 <select
                                   name="status"
-                                  value={animalData.statut}
                                   onChange={handleChange}
                                   autoComplete="status-name"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                                 >
-                                  <option>Acheté</option>
-                                  <option>Acquis</option>
+                                  <option value="Acheté">Acheté</option>
+                                  <option value="Acquis">Acquis</option>
                                 </select>
                               </div>
                             </div>
-
                           </div>
                         </SwiperSlide>
-                        ⠀⠀⠀⠀⠀⠀⠀
-                        ⠀⠀⠀⠀⠀⠀⠀
-
                       </Swiper>
-
-
-
                     </div>
                     <div className="mt-6 flex items-center justify-end gap-x-6">
                       <button
@@ -521,7 +508,6 @@ const animal = ({ takeAnimal }) => {
                       </button>
                       <button
                         type="submit"
-
                         className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
                         AJOUTER
@@ -530,7 +516,6 @@ const animal = ({ takeAnimal }) => {
                   </form>
                 </div>
               </div>
-
             )}
           </div>
         )}
@@ -538,36 +523,10 @@ const animal = ({ takeAnimal }) => {
         {/* //diagrame */}
 
       </div>
-      <div className=" p-8">
 
-        <div className=" mt-52 flex ">
-        <div>
-        <h1>Suivi des espèces d'animaux</h1>
-        //eto ny user mampiditra ny
-        <form action="">
-        <div className="">
-                                <select
-                                  name="espece"
-                                  value={animalData.espece}
-                                  onChange={handleChange}
-                                  autoComplete="species-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                                >
-                                  <option>Bovin</option>
-                                  <option>Porcin</option>
-                                  <option>Volaille</option>
-                                  <option>Caprin</option>
-                                  <option>Ovin</option>
-
-                                </select>
-                              </div>
-        </form>
-        
-        </div>
-      <div className='w-72'>
-      <Espece data={speciesData} />
-      
-      </div>
+      <div className="w-full">
+        <div className=''>
+          <Espece data={speciesData} />
         </div>
       </div>
 

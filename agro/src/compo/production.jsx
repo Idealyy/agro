@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { MdOutlineModeEdit } from 'react-icons/md';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import DiagKPI from './diagKPI';  // Assurez-vous que le chemin est correct
+import DiagKPI from './diagKPI'; 
+import url from "./../api/api"
+import Bar from './BarChartComponent'
+// Assurez-vous que le chemin est correct
 
 const Production = () => {
     const [type_produit, setType_produit] = useState('');
@@ -11,26 +15,51 @@ const Production = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [diagProps, setDiagProps] = useState(null);
+    const [produitsList, setProduitsList] = useState([]);
+    
+    const [formData, setFormData] = useState({
+        type_produit: '',
+        espece: '',
+        quantite: '',
+        qualite: ''
+    });
 
     useEffect(() => {
-        const fetchProductsFromApi = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/elevage/produit/getAll');
-                const data = await response.json();
-                setProducts(data);
-            } catch (error) {
-                console.error('Erreur lors de la récupération des produits :', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProductsFromApi();
+        fetchProduits();
     }, []);
+    
+    const fetchProduits = async () => {
+        try {
+            const response = await url.get('produits');
+            setProduitsList(response.data);
+            setLoading(false);
+            console.log(response.data); 
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
+    const handleChangedata = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value
+        });
+    };
+    
+    const handleSubmitdata = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('/api/submit', formData);
+            console.log(response.data);
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
+    };
 
     const fetchIdProduit = () => {
         const productNameLowerCase = type_produit.trim().toLowerCase();
-        const foundProduct = products.find(product => product.type_produit.trim().toLowerCase() === productNameLowerCase);
+        const foundProduct = produitsList.find(product => product.type_produit.trim().toLowerCase() === productNameLowerCase);
         if (foundProduct) {
             setId_produit(foundProduct.id_produit);
             return foundProduct.id_produit;
@@ -68,13 +97,9 @@ const Production = () => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/elevage/produit/delete/
-
-`, {
-                method: 'DELETE',
-            });
-            if (response.ok) {
-                setProducts(products.filter(product => product.id_produit !== id));
+            const response = await axios.delete(`http://localhost:8080/api/elevage/produit/delete/${id}`);
+            if (response.status === 200) {
+                setProduitsList(produitsList.filter(product => product.id_produit !== id));
             } else {
                 console.error('Failed to delete the product');
             }
@@ -85,26 +110,38 @@ const Production = () => {
 
     const handleUpdate = (product) => {
         setType_produit(product.type_produit);
-        setEspecef(product.especef);
+        setEspecef(product.espece);
         setMois(product.mois);
         setId_produit(product.id_produit);
         // Set additional state or handle logic for the update if necessary
     };
 
+    const [showPopup, setShowPopup] = useState(false);
+
+    const togglePopup = () => {
+        setShowPopup(!showPopup);
+    };
+
     return (
-        <div className='h-screen flex flex-col margin-8'>
-            <div>
-                <h1 className='text-xl font-cabin text-gray-600 mb-2 w-5/6'>
+        <div className='h-screen flex flex-col space-y-1 '>
+            <div className='h-[200] overflow-y-scroll'>
+               <div className="flex justify-center items-center py-3 ">
+               <h1 className=' text-xl font-cabin text-gray-600 w-5/6'>
                     Liste des produits par espèce
                 </h1>
-                <div className="h-[250px] overflow-y-scroll p-8">
-                    <table className="table-fixed overflow-x-auto w-full border-collapse bg-white rounded-lg text-gray-600 font-cabin h-56 overflow-scroll">
+                <button  className="bg-[#6ea3d8] text-white text-xs font-cabin px-4 py-2 rounded-full transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-[#6ea3d8] focus:outline-none">
+                    AJOUTER
+                </button>
+               </div>
+                <div className="h-[200px] px-8 py-2">
+                    <table className="table-fixed px-2  border-collapse bg-white rounded-lg text-gray-600 font-cabin h-40  overflow-y-scroll">
                         <thead>
                             <tr>
                                 <th className="w-1/4 px-4 py-2 text-center">Produit</th>
                                 <th className="w-1/4 px-4 py-2 text-center">Espèce</th>
                                 <th className="w-1/4 px-4 py-2 text-center">Quantité</th>
-                                <th className="w-1/4 px-4 py-2 text-center">Qualité</th>
+                                {/* <th className="w-1/4 px-4 py-2 text-center">Qualité</th> */}
+                                <th className="w-1/4 px-4 py-2 text-center">Date production</th>
                                 <th className="w-1/4 px-4 py-2 text-center">Action</th>
                             </tr>
                         </thead>
@@ -114,7 +151,7 @@ const Production = () => {
                                     <td colSpan="5" className="text-center py-4">Chargement en cours...</td>
                                 </tr>
                             ) : (
-                                products.map((item, index) => (
+                                produitsList.map((item, index) => (
                                     <TableRow key={index} item={item} onDelete={handleDelete} onUpdate={handleUpdate} />
                                 ))
                             )}
@@ -122,64 +159,27 @@ const Production = () => {
                     </table>
                 </div>
             </div>
-            <div className='flex '>
-                <div className="m-5 h-24">
-                    <form onSubmit={handleSubmit} className=" mx-auto bg-white p-4 rounded-lg shadow-md">
-                        <div className="mb-4">
-                            <label htmlFor="type_produit" className="block text-gray-700 font-bold mb-1">Entrez le nom du produit :</label>
-                            <input
-                                type="text"
-                                id="type_produit"
-                                name="type_produit"
-                                value={type_produit}
-                                onChange={handleInputChange}
-                                className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="especef" className="block text-gray-700 font-bold mb-1">Entrez l'espèce fournisseur :</label>
-                            <input
-                                type="text"
-                                id="especef"
-                                name="especef"
-                                value={especef}
-                                onChange={handleInputChange}
-                                className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="mois" className="block text-gray-700 font-bold mb-1">Entrez le mois :</label>
-                            <input
-                                type="text"
-                                id="mois"
-                                name="mois"
-                                value={mois}
-                                onChange={handleInputChange}
-                                className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
-                            />
-                        </div>
-                        <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            afficher diagramme
-                        </button>
-                    </form>
-                </div>
 
-                <div>
-                {/* Afficher DiagKPI si diagProps est défini */}
-                {diagProps && <DiagKPI {...diagProps} />}
-                </div>
+            {/* Formulaire pour ajouter ou modifier un produit */}
+          
+
+            <div className= 'w-[50%] mx-48 mt-0 '>
+                <Bar/>
             </div>
         </div>
     );
 };
 
 const TableRow = ({ item, onDelete, onUpdate }) => (
-    <tr className="border-b hover:bg-gray-100 text-center">
-        <td className="w-1/4 px-4 py-2">{item.type_produit}</td>
-        <td className="w-1/4 px-4 py-2">{item.especef}</td>
-        <td className="w-1/4 px-4 py-2">{item.quantite}</td>
-        <td className="w-1/4 px-4 py-2">{item.qualite}</td>
-        <td className="w-1/4 px-4 py-2">
+    <tr className=" hover:bg-gray-100 text-center">
+        <td className="w-1/4">{item.type_produit}</td>
+        <td className="w-1/4">{item.especef}</td>
+        <td className="w-1/4">{item.quantite}</td>
+        {/* <td className="w-1/4">{item.qualite}</td> */}
+        
+        <td className="w-1/4">{item.date_prod}</td>
+        
+        <td className="w-1/4">
             <div className="flex justify-center">
                 <div className="mr-4 hover:text-blue-500 duration-100 ease-in-out hover:-translate-y-1 hover:scale-110 hover:cursor-pointer" onClick={() => onUpdate(item)}>
                     <MdOutlineModeEdit />

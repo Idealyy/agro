@@ -10,8 +10,8 @@ const EventForm = ({ evenement }) => {
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md font-cabin">
       <div className='flex justify-between items-center'>
-        <h2 className="text-gray-700 font-bold">Filtered Events</h2>
-        <div className='bg-blue-300 p-2 rounded-md' onClick={() => setCloseModal(false)}>
+        <h2 className="text-gray-700 font-bold">Activité</h2>
+        <div className='bg-blue-300 p-2 rounded-md hover:cursor-pointer' onClick={() => setCloseModal(false)}>
           <FaPlus />
         </div>
       </div>
@@ -21,11 +21,11 @@ const EventForm = ({ evenement }) => {
             <div key={e.id_calendrier} className="bg-gray-100 p-2 my-2 rounded">
               <div className="font-semibold">{e.activite}</div>
               <div>Début : {new Date(e.date_debut).toLocaleString()}</div>
-              <div>Fin : {e.date_fin ? new Date(e.date_fin).toLocaleString() : "N/A"}</div>
+              <div>Fin : {e.date_fin ? new Date(e.date_fin).toLocaleString() : "pas défini"}</div>
             </div>
           ))
         ) : (
-          <div className="text-gray-500">Aucun événement trouvé pour la date sélectionnée.</div>
+          <div className="text-gray-500">Aucun activité trouvé pour la date sélectionnée.</div>
         )}
       </ul>
 

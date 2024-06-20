@@ -7,9 +7,9 @@ const searchbar = () => {
   return (
     <div className="h-14 w-full bg-gray-100 backdrop-blur-md backdrop-filter overflow-hidden flex items-center justify-between px-4 py-12 ">
       <div>
-        <h3 className='font-cabin text-2xl text-start text-bold text-gray-500 items-center justify-center'>Bienvenue username </h3>
+        <h3 className='font-cabin text-2xl text-start text-bold text-gray-500 items-center justify-center'>Bienvenue  </h3>
       </div>
-      <div className='absolute right-12'>
+      {/* <div className='absolute right-12'>
         <form className="relative  flex items-center">
 
 
@@ -38,12 +38,8 @@ const searchbar = () => {
           </button>
 
         </form>
-      </div>
-      <div className='absolute right-4 transition duration-200 ease-in-out hover:-translate-y-1 hover:scale-110 hover:text-[#6ea3d8]'>
-        <div className='text-gray-500 text-xl hover:text-[#6ea3d8]'>
-          <FaBell />
-        </div>
-      </div>
+      </div> */}
+
     </div>
 
 

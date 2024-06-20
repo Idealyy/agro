@@ -48,6 +48,9 @@ const today = ({ weather }) => {
         else if(desc == "orage"){
         return <img width="96" height="96" src="https://img.icons8.com/emoji/96/cloud-with-lightning-and-rain.png" alt="cloud-with-lightning-and-rain"/>
         }
+        else if (desc=="couvert" || desc=="nuageux" || desc=="peu nuageux"){
+            return <img width="96" height="96" src="https://img.icons8.com/emoji/96/cloud-emoji.png" alt="cloud-emoji"/>
+            }
         else{
         
         return "Error: Unknown"

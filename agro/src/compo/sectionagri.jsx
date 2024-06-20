@@ -12,6 +12,7 @@ const SectionAgri = () => {
 
   useEffect(() => {
     fetchEvent();
+    console.log(":---------" + dateSelected + "---------" + setEvenement)
   }, [dateSelected]);
 
   const handleFilter = (data, selectedDate) => {
@@ -24,13 +25,14 @@ const SectionAgri = () => {
     });
   
     setEvenement(filtered);
+    console.log(filtered)
   };
   
 
   const fetchEvent = async () => {
 
     try {
-      const response = await axios.get("http://localhost/api/agriculture/calendrier/getAll");
+      const response = await axios.get("http://localhost:8080/api/agriculture/calendrier/getAll");
       const eventList = response.data;
       const currentDate = dateSelected || new Date().toISOString().split('T')[0];
 
